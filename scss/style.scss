@@ -1,0 +1,317 @@
+@font-face {
+  font-family: 'nobileregular';
+  src: url('../fonts/nobile-regular-webfont.woff2') format('woff2'),
+    url('../fonts/nobile-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'nobileregular';
+}
+
+body {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-image: url('../img/covid.jpg');
+  background-position: center;
+  background-size: cover;
+  z-index: 1;
+}
+
+label {
+  margin: 10px;
+}
+
+button {
+  padding: 25px;
+  margin: 10px;
+  font-size: large;
+  z-index: 3;
+}
+
+a {
+  text-decoration: none;
+  font-size: 20px;
+  color: #464ebb;
+}
+
+a:hover {
+  text-decoration-line: overline;
+}
+
+li {
+  list-style: none;
+  padding: 10px 15px;
+  margin: 5px 10px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: #464ebb;
+  width: 360px;
+  border-radius: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+  margin: 5px 2px;
+}
+
+h3 {
+  margin: 10px;
+  color: #464ebb;
+}
+
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+  min-width: 370px;
+  align-items: center;
+  background-color: white;
+  margin: 5px 2px 20px 2px;
+  padding: 2px;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+}
+
+.info {
+  background-color: white;
+  margin: 15px 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 15px 10px;
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+}
+
+.endGameBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 80%;
+  max-width: 360px;
+  position: fixed;
+  top: -1000px;
+  background-color: rgba(30, 152, 200, 0.5);
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.gameOverDisplay {
+  margin: 10px;
+  font-size: 40px;
+  font-weight: bolder;
+  color: #464ebb;
+  background-color: whitesmoke;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.show {
+  animation: showGameOver 500ms 1500ms forwards;
+}
+
+#startButton {
+  position: relative;
+  top: 200px;
+  font-size: 50px;
+}
+
+@keyframes showGameOver {
+  0% {
+    top: -1000px;
+  }
+
+  100% {
+    top: 80px;
+  }
+}
+/* --- DOODLE --- */
+.doodleGrid {
+  width: 360px;
+  height: 600px;
+  background: url('../img/grid-background.jpg');
+  background-size: cover;
+  position: relative;
+  margin-top: 10px;
+  font-size: 150px;
+  text-align: center;
+  z-index: 2;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+}
+
+.doodleControls {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  position: absolute;
+  bottom: 10px;
+}
+
+.doodler {
+  width: 60px;
+  height: 85px;
+  background: url('../img/ghost.png');
+  background-size: cover;
+  position: absolute;
+}
+
+.platform {
+  background-color: chocolate;
+  border: 1px solid brown;
+  border-radius: 25%;
+  z-index: 1;
+}
+
+/* --- SNAKE --- */
+.snakeGrid {
+  margin: 10px;
+  width: 302px;
+  height: 302px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid black;
+  box-shadow: 0 2px 7px black;
+}
+
+.snakeGrid div {
+  width: 20px;
+  height: 20px;
+  border: 1px solid whitesmoke;
+}
+
+.snakeScore {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin: 10px;
+  font-size: 25px;
+  color: #464ebb;
+}
+
+.snake {
+  background-color: green;
+}
+
+.apple {
+  background-color: purple;
+}
+
+.snakeControl {
+  display: flex;
+  flex-wrap: wrap;
+  width: 180px;
+  height: 150px;
+}
+.snakeControl__box {
+  width: 60px;
+  height: 50px;
+}
+.snakeControl .direction {
+  background-color: #2727fa;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px black;
+}
+
+/* ---- Flappy-Bird ---- */
+.fb-start {
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  padding: 15px 40px;
+}
+.fb-container {
+  width: 360px;
+  height: 600px;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+  z-index: +1;
+}
+
+.fb-gameContainer {
+  width: 360px;
+  height: 600px;
+  position: absolute;
+}
+
+.fb-sky {
+  background: url(../flappy-bird/img/fb-game-background.png);
+  width: 360px;
+  height: 480px;
+  position: absolute;
+  user-select: none;
+}
+
+.fb-ground {
+  background: url(../flappy-bird/img/bottom-background.png);
+  width: 360px;
+  height: 120px;
+  position: absolute;
+  top: 480px;
+  z-index: +1;
+}
+
+.fb-bird {
+  background: url(../flappy-bird/img/flappy-bird.png);
+  width: 60px;
+  height: 45px;
+  position: absolute;
+}
+
+.fb-obstacle {
+  width: 60px;
+  background: url(../flappy-bird/img/flappybird-pipe.png);
+  height: 300px;
+  position: absolute;
+  user-select: none;
+}
+
+.fb-topObstacle {
+  width: 60px;
+  background: url(../flappy-bird/img/flappybird-pipe.png);
+  transform: rotate(180deg);
+  height: 300px;
+  position: absolute;
+  user-select: none;
+}
+
+.fb-scoreDisplay {
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 60px;
+  border-radius: 5px;
+  position: absolute;
+  top: 40px;
+  left: 260px;
+  background-color: lightgoldenrodyellow;
+  font-size: 30px;
+  z-index: +2;
+}

@@ -1,0 +1,227 @@
+@font-face {
+  font-family: 'nobileregular';
+  src: url('../fonts/nobile-regular-webfont.woff2') format('woff2'),
+    url('../fonts/nobile-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+$header-height: 4rem;
+
+/* --- LAYOUT --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(
+      217deg,
+      rgba(255, 0, 0, 0.8),
+      rgba(255, 0, 0, 0) 70.71%
+    ),
+    linear-gradient(127deg, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0) 70.71%),
+    linear-gradient(336deg, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0) 70.71%);
+  font-family: 'nobileregular';
+}
+
+h3 {
+  margin: 100px 0 10px 0;
+  padding: 15px 25px;
+  text-transform: uppercase;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+button {
+  padding: 20px;
+  margin: 20px;
+  font-size: 25px;
+  color: white;
+  font-weight: bolder;
+  background-color: rgb(74, 74, 153);
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgb(68, 68, 68);
+  cursor: pointer;
+}
+
+header {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  z-index: var(--z-front-all);
+}
+
+a {
+  text-decoration: none;
+  font-size: 20px;
+  color: rgb(70, 78, 187);
+}
+
+a:hover {
+  text-decoration-line: overline;
+}
+
+li {
+  list-style: none;
+  padding: 10px 15px;
+  margin: 5px 10px;
+  color: white;
+}
+
+ul {
+  display: flex;
+  align-items: center;
+}
+
+/* --- NAVBAR --- */
+.nav {
+  height: $header-height;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-weight: bold;
+  background-color: transparent;
+  z-index: var(--z-front-all);
+
+  @media screen and(max-width: 768px) {
+    height: $header-height - 1rem;
+    position: fixed;
+    width: 100vw;
+    top: 0px;
+    left: 0px;
+    padding: 10px;
+    justify-content: space-between;
+
+    &__menu {
+      @media screen and(max-width: 768px) {
+        position: fixed;
+        top: -100%;
+        left: 0;
+        width: 100vw;
+        height: 30vh;
+        padding: 2rem;
+        background-color: rgba($color: #161616, $alpha: 0.8);
+        transition: 0.3s;
+        z-index: var(--z-menu);
+      }
+    }
+  }
+
+  &__title {
+    margin-left: 10px;
+
+    & img {
+      width: 80px;
+      margin: 10px;
+      padding: 5px;
+    }
+  }
+
+  &__hamburger {
+    display: none;
+
+    @media screen and(max-width: 768px) {
+      z-index: var(--z-front-all);
+      position: fixed;
+      top: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+
+      &__slice {
+        width: 25px;
+        height: 4px;
+        background: #fff;
+        border-radius: 3px;
+        transition: all 0.5s ease-in-out;
+      }
+
+      &__slice::before,
+      &__slice::after {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 4px;
+        background: #fff;
+        border-radius: 3px;
+        transition: all 0.5s ease-in-out;
+      }
+
+      &__slice::before {
+        transform: translateY(-10px);
+      }
+
+      &__slice::after {
+        transform: translateY(10px);
+      }
+
+      /* BURGER ANIMATION */
+      &.open .nav__hamburger__slice {
+        transform: translateX(-35px);
+        background: transparent;
+        box-shadow: none;
+      }
+
+      &.open .nav__hamburger__slice::before {
+        transform: rotate(45deg) translate(20px, -20px);
+      }
+
+      &.open .nav__hamburger__slice::after {
+        transform: rotate(-45deg) translate(20px, 20px);
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+
+    @media screen and(max-width: 768px) {
+      flex-direction: column;
+      height: 100%;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__link {
+    margin-right: 3rem;
+  }
+
+  &__link a {
+    color: var(--white-color);
+  }
+}
+
+/* --- SHOW MENU --- */
+.show {
+  top: $header-height;
+}
+
+/* INDEX GAMES */
+.gameLinks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 300px;
+  margin: 80px 25px;
+  padding: 50px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  box-shadow: 0 2px 7px black;
+}
+
+#gameLinksTitle {
+  color: white;
+  font-size: 40px;
+}
