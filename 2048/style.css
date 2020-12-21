@@ -1,4 +1,4 @@
-.grid {
+.deuxMilles__grid {
   width: 400px;
   height: 400px;
   display: flex;
@@ -6,7 +6,7 @@
   background-color: blue;
 }
 
-.grid div {
+.deuxMilles__grid div {
   width: 100px;
   height: 100px;
   background-color: yellow;

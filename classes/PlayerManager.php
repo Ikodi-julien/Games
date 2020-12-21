@@ -57,4 +57,17 @@ class PlayerManager extends DBConnexion {
     }
     return $rqFb;
   }
+
+
+  public function get2048Players() {
+    try {
+      $rq2048 = $this->db->query(
+        'SELECT * FROM player WHERE gameName="2048" ORDER BY score DESC'
+        );
+      }
+    catch (Exception $e) {
+      die('Erreur dans PlayerManager->get2048Players() :'.$e->getMessage());
+    }
+    return $rq2048;
+  }
 }

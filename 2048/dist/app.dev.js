@@ -1,7 +1,7 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", function () {
-  var gridDisplay = document.querySelector(".grid");
+  var gridDisplay = document.querySelector(".deuxMilles__grid");
   var scoreDisplay = document.getElementById("score");
   var resultDisplay = document.getElementById("result");
   var width = 4;
@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (squares[i].innerHTML == 2048) {
         resultDisplay.innerHTML = "C Gagné !";
         document.removeEventListener("keyup", control);
+        endGame();
       }
     }
   };
@@ -210,7 +211,32 @@ document.addEventListener("DOMContentLoaded", function () {
     if (compteur === 0) {
       resultDisplay.innerHTML = "C Perdu";
       document.removeEventListener("keyup", control);
+      endGame();
     }
+  };
+
+  var endGame = function endGame() {
+    var endGameBox = document.querySelector(".endGameBox"); // Ajout d'un bouton reload
+
+    var reloadButton = document.createElement("button");
+    reloadButton.innerHTML = "Recommencer";
+    endGameBox.appendChild(reloadButton);
+    reloadButton.addEventListener("click", function () {
+      window.location.reload(true);
+    }); // Créer le boutton enregistrer
+
+    var registerButton = document.createElement("button");
+    registerButton.innerHTML = "Enregistrer ma perf"; // Lier le lien vers php
+
+    registerButton.addEventListener("click", function () {
+      // Récupérer le pseudo et commentaire
+      var pseudo = document.getElementById("pseudo").value;
+      var comment = document.getElementById("comment").value;
+      document.location.href = "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
+    }); // On ajoute les boutons et on affiche le tout
+
+    endGameBox.appendChild(registerButton);
+    endGameBox.classList.add("show");
   };
 
   createBoard();
