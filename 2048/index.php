@@ -59,8 +59,8 @@ ob_start();
   <div class=".gameContainer">
 
     <div class="deuxMilles__score__container">
-      <div class="deuxMilles__score__title">Score</div>
-      <span id="score">0</span>
+      <h3 class="deuxMilles__score__title">Score<span id="score">0</span></h3>
+      
     </div>
 
     <div id="result"></div>
