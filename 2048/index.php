@@ -1,6 +1,7 @@
 <?php
 header("Cache-Control: no-cache, must-revalidate");
 
+// $js2 = "./swipe.js";
 /* Connexion DataBase */
 function loadClass($className) {
   require('../classes/'.$className.'.php');
@@ -64,7 +65,18 @@ ob_start();
     </div>
 
     <div id="result"></div>
-    <div class="deuxMilles__grid"></div>
+
+    
+    <div class="deuxMilles__grid">
+      <div class="deuxMilles__touchsurface" id="deuxMilles__touchsurface"></div>
+    </div>
+
+    <div class="deuxMilles__winner" id="deuxMilles__winner">
+
+      <h1>GAGNÉ !</h1>
+      <p>Clique ICI quand tu veux pour enregistrer ton score (arrête la partie)</p>
+
+    </div>
 
   </div>
 </div>
@@ -74,9 +86,10 @@ ob_start();
 
 <?php
 $grid = ob_get_clean();
-$infos = '<p><strong>Pour que Flappy remonte :</strong><br>
-          Avec le clavier => touche "Entrée",<br>
-          Smartphone ou souris => le bouton "FLY"<br></p>';
+$infos = '<p><strong>Atteindre 2048 pour gagner !</strong><br>
+          Avec les flèches du clavier,<br>
+          swipe sur smartphone,
+          ;-)<br></p>';
 
 require '../template/template.php';
 ?>

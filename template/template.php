@@ -4,6 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="./app.js"></script>
+    <?php
+    if (isset($js2)) {
+      echo "<script src=".$js2."></script>";
+    }
+    ?>
     <link rel="stylesheet" href="../css/style.css" />
     <title>Ikodi-Games</title>
   </head>
@@ -30,7 +35,7 @@
       </div>
 
       <div class="endGameBox">
-      <div class="gameOverDisplay">GAME OVER</div>
+      <div class="gameOverDisplay" id="gameOverDisplay">GAME OVER</div>
         <label for="pseudo">Pseudo : 
           <input type="text" name="pseudo" id="pseudo" value="Régis">
         </label>

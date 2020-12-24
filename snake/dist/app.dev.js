@@ -1,13 +1,13 @@
 "use strict";
 
-document.addEventListener('DOMContentLoaded', function () {
-  var squares = document.querySelectorAll('.snakeGrid div');
-  var scoreDisplay = document.querySelector('span');
-  var startBtn = document.querySelector('.start');
-  var snakeUp = document.getElementById('snakeUp');
-  var snakeLeft = document.getElementById('snakeLeft');
-  var snakeDown = document.getElementById('snakeDown');
-  var snakeRight = document.getElementById('snakeRight');
+document.addEventListener("DOMContentLoaded", function () {
+  var squares = document.querySelectorAll(".snakeGrid div");
+  var scoreDisplay = document.querySelector("span");
+  var startBtn = document.querySelector(".start");
+  var snakeUp = document.getElementById("snakeUp");
+  var snakeLeft = document.getElementById("snakeLeft");
+  var snakeDown = document.getElementById("snakeDown");
+  var snakeRight = document.getElementById("snakeRight");
   var width = 15;
   var currentIndex = 0;
   var appleIndex = 0;
@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
   function startGame() {
     // On efface le snake qui était là avant
     currentSnake.forEach(function (index) {
-      return squares[index].classList.remove('snake');
+      return squares[index].classList.remove("snake");
     }); // On efface la pomme aussi
 
-    squares[appleIndex].classList.remove('apple'); // ?
+    squares[appleIndex].classList.remove("apple"); // ?
 
     clearInterval(interval); // C'est le départ donc score à 0
 
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentIndex = 0; // On affiche le snake du départ
 
     currentSnake.forEach(function (index) {
-      return squares[index].classList.add('snake');
+      return squares[index].classList.add("snake");
     }); //
 
     interval = setInterval(moveOutcomes, intervalTime);
@@ -54,18 +54,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if ( // tape le mur du bas
     currentSnake[0] + width >= width * width && direction === width || // tape le mur de droite
     currentSnake[0] % width === width - 1 && direction === 1 || // tape le mur de gauche
-    currentSnake[0] % width === 0 && direction === -1 || currentSnake[0] - width < 0 && direction === -width || squares[currentSnake[0] + direction].classList.contains('snake')) {
+    currentSnake[0] % width === 0 && direction === -1 || currentSnake[0] - width < 0 && direction === -width || squares[currentSnake[0] + direction].classList.contains("snake")) {
       clearInterval(interval);
       endGame();
     }
 
     var tail = currentSnake.pop();
-    squares[tail].classList.remove('snake');
+    squares[tail].classList.remove("snake");
     currentSnake.unshift(currentSnake[0] + direction);
 
-    if (squares[currentSnake[0]].classList.contains('apple')) {
-      squares[currentSnake[0]].classList.remove('apple');
-      squares[tail].classList.add('snake');
+    if (squares[currentSnake[0]].classList.contains("apple")) {
+      squares[currentSnake[0]].classList.remove("apple");
+      squares[tail].classList.add("snake");
       currentSnake.push(tail);
       randomApple();
       score++;
@@ -75,20 +75,21 @@ document.addEventListener('DOMContentLoaded', function () {
       interval = setInterval(moveOutcomes, intervalTime);
     }
 
-    squares[currentSnake[0]].classList.add('snake');
+    squares[currentSnake[0]].classList.add("snake");
   }
 
   function randomApple() {
     do {
       appleIndex = Math.floor(Math.random() * squares.length);
-    } while (squares[appleIndex].classList.contains('snake'));
+    } while (squares[appleIndex].classList.contains("snake"));
 
-    squares[appleIndex].classList.add('apple');
+    squares[appleIndex].classList.add("apple");
   } // Assign function to keycodes
 
 
   function control(e) {
-    squares[currentIndex].classList.remove('snake');
+    e.preventDefault();
+    squares[currentIndex].classList.remove("snake");
 
     if (e.keyCode === 39) {
       direction = 1;
@@ -118,32 +119,32 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function endGame() {
-    var endGameBox = document.querySelector('.endGameBox'); // Ajout d'un bouton reload
+    var endGameBox = document.querySelector(".endGameBox"); // Ajout d'un bouton reload
 
-    var reloadButton = document.createElement('button');
-    reloadButton.innerHTML = 'Recommencer';
+    var reloadButton = document.createElement("button");
+    reloadButton.innerHTML = "Recommencer";
     endGameBox.appendChild(reloadButton);
-    reloadButton.addEventListener('click', function () {
+    reloadButton.addEventListener("click", function () {
       window.location.reload(true);
     }); // Créer le boutton enregistrer
 
-    var registerButton = document.createElement('button');
-    registerButton.innerHTML = 'Enregistrer ma perf'; // Lier le lien vers php
+    var registerButton = document.createElement("button");
+    registerButton.innerHTML = "Enregistrer ma perf"; // Lier le lien vers php
 
-    registerButton.addEventListener('click', function () {
+    registerButton.addEventListener("click", function () {
       // Récupérer le pseudo et commentaire
-      var pseudo = document.getElementById('pseudo').value;
-      var comment = document.getElementById('comment').value;
-      document.location.href = '?pseudo=' + pseudo + '&score=' + score + '&comment=' + comment;
+      var pseudo = document.getElementById("pseudo").value;
+      var comment = document.getElementById("comment").value;
+      document.location.href = "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
     });
     endGameBox.appendChild(registerButton);
-    endGameBox.style.top = '100px';
+    endGameBox.style.top = "100px";
   }
 
-  document.addEventListener('keyup', control);
-  snakeUp.addEventListener('click', snakeGoUp);
-  snakeLeft.addEventListener('click', snakeGoLeft);
-  snakeDown.addEventListener('click', snakeGoDown);
-  snakeRight.addEventListener('click', snakeGoRight);
-  startBtn.addEventListener('click', startGame);
+  document.addEventListener("keyup", control);
+  snakeUp.addEventListener("click", snakeGoUp);
+  snakeLeft.addEventListener("click", snakeGoLeft);
+  snakeDown.addEventListener("click", snakeGoDown);
+  snakeRight.addEventListener("click", snakeGoRight);
+  startBtn.addEventListener("click", startGame);
 });

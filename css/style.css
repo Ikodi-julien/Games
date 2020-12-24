@@ -4,6 +4,41 @@
   font-weight: normal;
   font-style: normal;
 }
+/*--------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------*/
+:root {
+  --color-back-0-2048: rgb(128, 110, 139);
+  --color-border-grid-2048: rgb(80, 69, 87);
+  --color-2048-0: rgb(40, 40, 40);
+  --color-2048-back-2: rgb(240, 210, 255);
+  --color-2048-2: rgb(66, 57, 71);
+  --color-2048-back-4: rgb(220, 185, 255);
+  --color-2048-4: rgb(66, 57, 71);
+  --color-2048-back-8: rgb(200, 170, 255);
+  --color-2048-8: rgb(66, 57, 71);
+  --color-2048-back-16: rgb(180, 155, 255);
+  --color-2048-16: rgb(66, 57, 71);
+  --color-2048-back-32: rgb(160, 140, 255);
+  --color-2048-32: rgb(66, 57, 71);
+  --color-2048-back-64: rgb(140, 125, 255);
+  --color-2048-64: rgb(66, 57, 71);
+  --color-2048-back-128: rgb(120, 110, 255);
+  --color-2048-128: rgb(66, 57, 71);
+  --color-2048-back-256: rgb(100, 95, 255);
+  --color-2048-256: rgb(244, 224, 255);
+  --color-2048-back-512: rgb(80, 80, 255);
+  --color-2048-512: rgb(244, 224, 255);
+  --color-2048-back-1024: rgb(60, 65, 255);
+  --color-2048-1024: rgb(244, 224, 255);
+  --color-2048-back-2048: rgb(40, 50, 255);
+  --color-2048-2048: rgb(244, 224, 255);
+  --color-2048-back-4096: rgb(20, 35, 255);
+  --color-2048-4096: rgb(244, 224, 255);
+  --font-color-blue: #464ebb;
+  --background-color-blue: #464ebb;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -69,6 +104,10 @@ nav {
 h3 {
   margin: 10px;
   color: #464ebb;
+}
+h3 span {
+  margin: 10px;
+  font-size: 1.5em;
 }
 
 /* --- COMMUN A TOUS LES JEUX --- */
@@ -320,18 +359,170 @@ h3 {
 
 /* --- 2048 --- */
 .deuxMilles__grid {
-  width: 400px;
-  height: 400px;
+  position: relative;
+  width: 320px;
+  height: 320px;
   display: flex;
   flex-wrap: wrap;
-  background-color: blue;
+  background-color: var(--color-border-grid-2048);
+  border: 8px solid var(--color-border-grid-2048);
+  border-radius: 4px;
+  z-index: 1;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__grid {
+    width: 360px;
+    height: 360px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__grid {
+    width: 500px;
+    height: 500px;
+  }
+}
+.deuxMilles__touchsurface {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.deuxMilles__square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  height: 25%;
+  background-color: var(--color-back-0-2048);
+  color: var(--color-back-0-2048);
+  text-align: center;
+  line-height: 50px;
+  vertical-align: middle;
+  font-size: 50px;
+  font-weight: bold;
+  border: 8px solid var(--color-border-grid-2048);
+  border-radius: 4px;
+  transform: translateX(0);
+  opacity: 1;
+}
+.deuxMilles__2 {
+  color: var(--color-2048-2);
+  background-color: var(--color-2048-back-2);
+}
+.deuxMilles__4 {
+  color: var(--color-2048-4);
+  background-color: var(--color-2048-back-4);
+}
+.deuxMilles__8 {
+  color: var(--color-2048-8);
+  background-color: var(--color-2048-back-8);
+}
+.deuxMilles__16 {
+  color: var(--color-2048-16);
+  background-color: var(--color-2048-back-16);
+}
+.deuxMilles__32 {
+  color: var(--color-2048-32);
+  background-color: var(--color-2048-back-32);
+}
+.deuxMilles__64 {
+  color: var(--color-2048-64);
+  background-color: var(--color-2048-back-64);
+}
+.deuxMilles__128 {
+  color: var(--color-2048-128);
+  background-color: var(--color-2048-back-128);
+  font-size: 45px;
+}
+.deuxMilles__256 {
+  color: var(--color-2048-256);
+  background-color: var(--color-2048-back-256);
+  font-size: 40px;
+}
+.deuxMilles__512 {
+  color: var(--color-2048-512);
+  background-color: var(--color-2048-back-512);
+  font-size: 40px;
+}
+.deuxMilles__1024 {
+  color: var(--color-2048-1024);
+  background-color: var(--color-2048-back-1024);
+  font-size: 35px;
+}
+.deuxMilles__2048 {
+  color: var(--color-2048-2048);
+  background-color: var(--color-2048-back-2048);
+  font-size: 35px;
+}
+.deuxMilles__4096 {
+  color: var(--color-2048-4096);
+  background-color: var(--color-2048-back-4096);
+  font-size: 35px;
+}
+.deuxMilles__winner {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: -2000px;
+  width: 360px;
+  margin: auto;
+  padding: 10px;
+  transition: top 300ms;
+  height: 130px;
+  font-size: 18px;
+  background-color: var(--background-color-blue);
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+.deuxMilles__winner h1 {
+  font-size: 22px;
+}
+.deuxMilles__winner__show {
+  top: 10px;
+  transition: top 300ms;
 }
 
-.deuxMilles__grid div {
-  width: 100px;
-  height: 100px;
-  background-color: yellow;
-  font-size: 60px;
-  text-align: center;
-  font-weight: bold;
+.deuxMilles--newSquare {
+  animation: newSquare 250ms;
+}
+
+.deuxMilles--moveRight {
+  transform: translateX(90px);
+  z-index: 2;
+  opacity: 1;
+  transition: transform 35ms ease-in-out;
+}
+
+.deuxMilles--moveLeft {
+  transform: translateX(-90px);
+  z-index: 2;
+  opacity: 1;
+  transition: transform 35ms ease-in-out;
+}
+
+.deuxMilles--moveUp {
+  transform: translateY(-90px);
+  z-index: 2;
+  opacity: 1;
+  transition: transform 35ms ease-in-out;
+}
+
+.deuxMilles--moveDown {
+  transform: translateY(90px);
+  z-index: 2;
+  opacity: 1;
+  transition: transform 35ms ease-in-out;
+}
+
+@keyframes newSquare {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

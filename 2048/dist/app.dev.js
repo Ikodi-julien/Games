@@ -3,7 +3,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   var gridDisplay = document.querySelector(".deuxMilles__grid");
   var scoreDisplay = document.getElementById("score");
-  var resultDisplay = document.getElementById("result");
   var width = 4;
   var squares = [];
   var score = 0;
@@ -12,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
   /* ----------------- COMMON AND MODEL ------------------------------*/
 
   /* -----------------------------------------------------------------*/
-  // Create a playing board
 
   var createBoard = function createBoard() {
     for (var i = 0; i < width * width; i++) {
@@ -25,20 +23,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     generateNumber(squares);
     generateNumber(squares);
-  }; // Displays the board from squares list
-
-
-  var displayNewBoard = function displayNewBoard(list) {
-    // On vide la grid de ses éléments
-    while (gridDisplay.firstChild) {
-      gridDisplay.removeChild(gridDisplay.firstChild);
-    } // On créé les éléments à partir de la list
-
-
-    list.forEach(function (element) {
-      gridDisplay.appendChild(element);
-    });
-  }; // generate a number randomly
+  };
+  /**
+   * Add a "2" in an empty square (with "0" inside)
+   * @param {Object[]} squares - List of HTML elts in grid
+   */
 
 
   var generateNumber = function generateNumber(squares) {
@@ -46,7 +35,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (squares[randomNumber].innerText == 0) {
       squares[randomNumber].innerText = 2;
-      styleSquares(squares);
+      styleSquares(squares); /// On ajoute une classe anime
+
+      squares[randomNumber].classList.add("deuxMilles--newSquare");
     } else generateNumber(squares);
   };
 
@@ -60,156 +51,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     scoreDisplay.innerHTML = score;
   };
-  /*-------------------------------------------------------------*/
-
-  /*------------- MOVES OPERATIONS ------------------------------*/
-
-  /*-------------------------------------------------------------*/
-
-
-  var combineRow = function combineRow(squares, direction) {
-    if (direction == "left") {
-      for (var i = 0; i < squares.length; i++) {
-        if (i % 4 !== 3 && squares[i].innerHTML == squares[i + 1].innerHTML) {
-          var combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i + 1].innerHTML);
-          squares[i].innerHTML = combinedTotal;
-          squares[i + 1].innerHTML = 0;
-        }
-      }
-    } else {
-      for (var _i = squares.length - 1; _i > 0; _i--) {
-        if (_i % 4 !== 0 && squares[_i].innerText != 0 && squares[_i - 1].innerText != 0 && squares[_i].innerHTML === squares[_i - 1].innerHTML) {
-          var _combinedTotal = parseInt(squares[_i].innerHTML) + parseInt(squares[_i - 1].innerHTML);
-
-          squares[_i].innerHTML = _combinedTotal;
-          squares[_i - 1].innerHTML = 0;
-          return squares[_i - 1];
-        }
-      }
-    }
-  };
-
-  var combineColumn = function combineColumn(squares, direction) {
-    if (direction === "up") {
-      for (var i = 0; i < 12; i++) {
-        if (squares[i].innerHTML === squares[i + width].innerHTML) {
-          var combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i + width].innerHTML);
-          squares[i].innerHTML = combinedTotal;
-          squares[i + width].innerHTML = 0;
-        }
-      }
-    } else {
-      for (var _i2 = squares.length - 1; _i2 > 4; _i2--) {
-        if (squares[_i2].innerHTML == squares[_i2 - width].innerHTML) {
-          var _combinedTotal2 = parseInt(squares[_i2].innerHTML) + parseInt(squares[_i2 - width].innerHTML);
-
-          squares[_i2].innerHTML = _combinedTotal2;
-          squares[_i2 - width].innerHTML = 0;
-        }
-      }
-    }
-  }; //swipe right
-
-
-  var pushRight = function pushRight() {
-    for (var i = 0; i < 16; i++) {
-      if (i % 4 === 0) {
-        var totalOne = squares[i].innerHTML;
-        var totalTwo = squares[i + 1].innerHTML;
-        var totalThree = squares[i + 2].innerHTML;
-        var totalFour = squares[i + 3].innerHTML;
-        var row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
-        var filteredRow = row.filter(function (num) {
-          return num;
-        });
-        var missing = 4 - filteredRow.length;
-        var zeros = Array(missing).fill(0);
-        var newRow = zeros.concat(filteredRow);
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
-      }
-    }
-  }; //swipe left
-
-
-  var swipeLeft = function swipeLeft() {
-    for (var i = 0; i < 16; i++) {
-      if (i % 4 === 0) {
-        var totalOne = squares[i].innerHTML;
-        var totalTwo = squares[i + 1].innerHTML;
-        var totalThree = squares[i + 2].innerHTML;
-        var totalFour = squares[i + 3].innerHTML;
-        var row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
-        var filteredRow = row.filter(function (num) {
-          return num;
-        });
-        var missing = 4 - filteredRow.length;
-        var zeros = Array(missing).fill(0);
-        var newRow = filteredRow.concat(zeros);
-        squares[i].innerHTML = newRow[0];
-        squares[i + 1].innerHTML = newRow[1];
-        squares[i + 2].innerHTML = newRow[2];
-        squares[i + 3].innerHTML = newRow[3];
-      }
-    }
-  }; //swipe up
-
-
-  var swipeUp = function swipeUp() {
-    for (var i = 0; i < 4; i++) {
-      var totalOne = squares[i].innerHTML;
-      var totalTwo = squares[i + width].innerHTML;
-      var totalThree = squares[i + width * 2].innerHTML;
-      var totalFour = squares[i + width * 3].innerHTML;
-      var column = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
-      var filteredColumn = column.filter(function (num) {
-        return num;
-      });
-      var missing = 4 - filteredColumn.length;
-      var zeros = Array(missing).fill(0);
-      var newColumn = filteredColumn.concat(zeros);
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
-    }
-  }; //swipe up
-
-
-  var swipeDown = function swipeDown() {
-    for (var i = 0; i < 4; i++) {
-      var totalOne = squares[i].innerHTML;
-      var totalTwo = squares[i + width].innerHTML;
-      var totalThree = squares[i + width * 2].innerHTML;
-      var totalFour = squares[i + width * 3].innerHTML;
-      var column = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)];
-      var filteredColumn = column.filter(function (num) {
-        return num;
-      });
-      var missing = 4 - filteredColumn.length;
-      var zeros = Array(missing).fill(0);
-      var newColumn = zeros.concat(filteredColumn);
-      squares[i].innerHTML = newColumn[0];
-      squares[i + width].innerHTML = newColumn[1];
-      squares[i + width * 2].innerHTML = newColumn[2];
-      squares[i + width * 3].innerHTML = newColumn[3];
-    }
-  };
   /* ---------------------------------------------------------------*/
 
   /* ------------------- STYLING -----------------------------------*/
 
   /* ---------------------------------------------------------------*/
 
+  /**
+   *
+   * @param {Object[]} gridList - La liste des cases de la grid
+   */
 
-  var swipRightStyle = function swipRightStyle(element) {
-    element.classList.add("deuxMilles--swRight");
-  };
 
-  var styleSquares = function styleSquares(squares) {
-    squares.forEach(function (element) {
+  var styleSquares = function styleSquares(gridList) {
+    gridList.forEach(function (element) {
+      element.classList.remove(element.classList.item(3));
       element.classList.remove(element.classList.item(2));
       element.classList.remove(element.classList.item(1)); // On met la classe en fonction du innerHtml de la case
 
@@ -270,196 +126,315 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("Qu'il n'existe ".concat(element));
       }
     });
-  };
-  /* ---------------------------------------------------------------- */
-
-  /* ----------------- CONTROLS ------------------------------------- */
-
-  /* ---------------------------------------------------------------- */
-
-
-  var control = function control(event) {
-    if (event.key == "ArrowRight") {
-      keyRight();
-    }
-
-    if (event.key == "ArrowLeft") {
-      keyLeft();
-    }
-
-    if (event.key == "ArrowUp") {
-      keyUp();
-    }
-
-    if (event.key == "ArrowDown") {
-      keyDown();
-    }
+    return gridList;
   };
   /*--------------------------------------------------------------*/
-  // 0.1- On identifie les cases contenant autre chose que 0 et ayant
-  // un zero à leur droite
+
+  /**
+   * Returns a list of index of elts with 0 on their right
+   * @param {Object[]} gridList - Liste des divs dans grid
+   */
 
 
-  var getDivToMoveRight = function getDivToMoveRight(list) {
+  var getDivToMove = function getDivToMove(gridList, direction) {
     var indexList = [];
 
-    for (var i = 0; i < 15; i++) {
-      if (i % 4 != 3 && list[i].innerText != 0 && list[i + 1].innerText == 0) {
-        indexList.push(i);
-      }
-    }
-
-    console.log("Index à bouger à droite : " + indexList);
-    return indexList;
-  };
-
-  var getDivsToMerge = function getDivsToMerge(list) {
-    var indexList = [];
-
-    for (var i = 0; i < 15; i++) {
-      if (i != 3 && i % 4 != 3 && list[i].innerText != 0 && list[i + 1].innerText === list[i].innerText) {
-        indexList.push(i);
-      }
-    }
-
-    console.log("Index à merger à droite : " + indexList);
-    return indexList;
-  }; // 0.2- On déplace visuellement les divs concernées vers la droite
-  // d'une case et on met à jour l'ordre des squares sans afficher
-
-
-  var moveDivsToTheRight = function moveDivsToTheRight(listIndex) {
-    var info = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-    listIndex.forEach(function (index) {
-      squares[index].classList.add("deuxMilles--moveRight");
-      console.log(squares[index]);
-
-      if (!info) {
-        squares[index].classList.add("deuxMilles--under");
-      }
-    });
-  };
-
-  var fillDivsRight = function fillDivsRight() {
-    // On récupère l'index des divs à déplacer à droite
-    var listIndexToMoveRight = getDivToMoveRight(squares); // On déplace visuellement les divs
-
-    moveDivsToTheRight(listIndexToMoveRight); // On refait l'affichage après le temps d'animation
-
-    setTimeout(function () {
-      // On change les valeurs dans les divs
-      squares = replaceElementInnerText(listIndexToMoveRight, squares); // on remet en place les divs
-
-      removeClassMoveRight(); // On refait le style du tableau
-
-      styleSquares(squares);
-      listIndexToMoveRight = getDivToMoveRight(squares);
-
-      if (!listIndexToMoveRight.length) {
-        return;
-      } else {
-        fillDivsRight();
-      }
-
-      console.log(listIndexToMoveRight.length);
-    }, 30);
-  };
-
-  var mergeDivsRight = function mergeDivsRight() {
-    // On identifie les cases ayant un nombre identique à leur droite
-    var listDivsToMerge = getDivsToMerge(squares);
-    console.log(listDivsToMerge.length);
-
-    if (listDivsToMerge.length) {
-      // On déplace visuellement les divs
-      moveDivsToTheRight(listDivsToMerge);
-      setTimeout(function () {
-        // on affiche la somme des deux cases dans la case de droite,
-        squares = replaceElementInnerText(listDivsToMerge, squares); // on remet en place les divs
-
-        removeClassMoveRight(); // On refait le style du tableau
-
-        styleSquares(squares);
-        listDivsToMerge = getDivToMoveRight(squares);
-
-        if (!listDivsToMerge.length) {
-          return;
-        } else {
-          mergeDivsRight();
+    if (direction === "ArrowRight") {
+      for (var i = 0; i < 15; i++) {
+        if (i % 4 != 3 && gridList[i].innerText != 0 && gridList[i + 1].innerText == 0) {
+          indexList.push(i);
         }
+      }
+    } else if (direction === "ArrowLeft") {
+      for (var _i = 1; _i < 16; _i++) {
+        if (_i % 4 != 0 && gridList[_i].innerText != 0 && gridList[_i - 1].innerText == 0) {
+          indexList.push(_i);
+        }
+      }
+    } else if (direction === "ArrowUp") {
+      for (var _i2 = 15; _i2 > 3; _i2--) {
+        if (gridList[_i2].innerText != 0 && gridList[_i2 - 4].innerText == 0) {
+          indexList.push(_i2);
+        }
+      }
+    } else if (direction === "ArrowDown") {
+      for (var _i3 = 0; _i3 < 12; _i3++) {
+        if (gridList[_i3].innerText != 0 && gridList[_i3 + 4].innerText == 0) {
+          indexList.push(_i3);
+        }
+      }
+    }
+
+    return indexList;
+  };
+  /**
+   * Returns a list of index in order to merge corresponding elts
+   * @param {Object[]} gridList -  Liste des divs dans grid
+   */
+
+
+  var getDivsToMerge = function getDivsToMerge(gridList, direction) {
+    var indexList = [];
+
+    if (direction === "ArrowRight") {
+      for (var i = 0; i < 15; i++) {
+        if (i != 3 && i % 4 != 3 && gridList[i].innerText != 0 && gridList[i + 1].innerText === gridList[i].innerText) {
+          indexList.push(i);
+
+          if (i != 2 && i % 4 != 2) {
+            if (gridList[i].innerText === gridList[i + 2].innerText) {
+              indexList.pop();
+            }
+          }
+        }
+      }
+    } else if (direction === "ArrowLeft") {
+      for (var _i4 = 1; _i4 < 16; _i4++) {
+        if (_i4 % 4 != 0 && gridList[_i4].innerText != 0 && gridList[_i4 - 1].innerText === gridList[_i4].innerText) {
+          indexList.push(_i4);
+
+          if (_i4 != 1 && _i4 % 4 != 1) {
+            if (gridList[_i4].innerText === gridList[_i4 - 2].innerText) {
+              indexList.pop();
+            }
+          }
+        }
+      }
+    } else if (direction === "ArrowUp") {
+      for (var _i5 = 15; _i5 > 3; _i5--) {
+        if (gridList[_i5].innerText != 0 && gridList[_i5 - 4].innerText === gridList[_i5].innerText) {
+          indexList.push(_i5);
+
+          if (_i5 > 7 && gridList[_i5].innerText === gridList[_i5 - 8].innerText) {
+            indexList.pop();
+          }
+        }
+      }
+    } else if (direction === "ArrowDown") {
+      for (var _i6 = 0; _i6 < 12; _i6++) {
+        if (gridList[_i6].innerText != 0 && gridList[_i6 + 4].innerText === gridList[_i6].innerText) {
+          indexList.push(_i6);
+
+          if (_i6 < 8 && gridList[_i6].innerText === gridList[_i6 + 8].innerText) {
+            indexList.pop();
+          }
+        }
+      }
+    }
+
+    return indexList;
+  };
+  /**
+   * Visually moves some elements by adding a class
+   * @param {Object[]} gridList - Liste des divs dans grid, elt HTML
+   */
+
+
+  var visuallyMoveSquares = function visuallyMoveSquares(gridList, direction) {
+    // On récupère l'index des divs à déplacer à droite
+    var listIndex = getDivToMove(gridList, direction); //
+
+    if (direction === "ArrowRight") {
+      listIndex.forEach(function (index) {
+        gridList[index].classList.add("deuxMilles--moveRight");
+      });
+    } else if (direction === "ArrowLeft") {
+      listIndex.forEach(function (index) {
+        gridList[index].classList.add("deuxMilles--moveLeft");
+      });
+    } else if (direction === "ArrowUp") {
+      listIndex.forEach(function (index) {
+        gridList[index].classList.add("deuxMilles--moveUp");
+      });
+    } else if (direction === "ArrowDown") {
+      listIndex.forEach(function (index) {
+        gridList[index].classList.add("deuxMilles--moveDown");
       });
     }
   };
+  /**
+   *Changes squares value, put them in place, style them and do it again
+   * @param {Object[]} gridList - Liste des cases dans la grid
+   */
 
-  var replaceElementInnerText = function replaceElementInnerText(listIndex, listOfElements) {
-    // On remplace le contenu de l'élément i+1 par la somme i + (i+1)
-    listIndex.forEach(function (index) {
-      var nb1 = parseInt(listOfElements[index].innerHTML);
-      var nb2 = parseInt(listOfElements[index + 1].innerHTML);
-      nb2 += nb1;
-      listOfElements[index].innerHTML = 0;
-      listOfElements[index + 1].innerHTML = nb2;
-    });
-    console.log("Ok replaceElementInnerText");
-    return listOfElements;
+
+  var refreshDisplay = function refreshDisplay(gridList, direction) {
+    var listIndexToMove = getDivToMove(gridList, direction); // On change les valeurs dans les divs
+
+    gridList = replaceElementInnerText(direction, listIndexToMove, gridList); // on remet en place les divs
+
+    removeClassVisualMove(direction); // On refait le style du tableau
+
+    styleSquares(gridList);
+    return gridList;
   };
+  /**
+   * Merge squares to the right
+   * @param {number[]} listIndex - La liste des divs dans grid
+   * @param {Object[]} gridList - La liste des divs dans grid
+   */
 
-  var removeClassMoveRight = function removeClassMoveRight() {
-    var elementsWithClassToRemove = document.getElementsByClassName("deuxMilles--moveRight");
+
+  var mergeDivs = function mergeDivs(direction, listIndex, gridList) {
+    gridList = replaceElementInnerText(direction, listIndex, gridList); // on remet en place les divs
+
+    removeClassVisualMove(direction); // On refait le style du tableau
+
+    return styleSquares(gridList);
+  };
+  /**
+   * Do the math and replace text value in squares
+   * @param {Object[]} listIndex - list d'index donnée par getDivsToMove ***
+   * @param {Object[]} listOfElements - la liste des eléments dans grid
+   */
+
+
+  var replaceElementInnerText = function replaceElementInnerText(direction, indexList, gridList) {
+    if (direction === "ArrowRight") {
+      indexList.forEach(function (index) {
+        var nb1 = parseInt(gridList[index].innerHTML);
+        var nb2 = parseInt(gridList[index + 1].innerHTML);
+        nb2 += nb1;
+        gridList[index].innerHTML = 0;
+        gridList[index + 1].innerHTML = nb2;
+      });
+    } else if (direction === "ArrowLeft") {
+      indexList.forEach(function (index) {
+        var nb1 = parseInt(gridList[index].innerHTML);
+        var nb2 = parseInt(gridList[index - 1].innerHTML);
+        nb2 += nb1;
+        gridList[index].innerHTML = 0;
+        gridList[index - 1].innerHTML = nb2;
+      });
+    } else if (direction === "ArrowUp") {
+      indexList.forEach(function (index) {
+        var nb1 = parseInt(gridList[index].innerHTML);
+        var nb2 = parseInt(gridList[index - 4].innerHTML);
+        nb2 += nb1;
+        gridList[index].innerHTML = 0;
+        gridList[index - 4].innerHTML = nb2;
+      });
+    } else if (direction === "ArrowDown") {
+      indexList.forEach(function (index) {
+        var nb1 = parseInt(gridList[index].innerHTML);
+        var nb2 = parseInt(gridList[index + 4].innerHTML);
+        nb2 += nb1;
+        gridList[index].innerHTML = 0;
+        gridList[index + 4].innerHTML = nb2;
+      });
+    }
+
+    return gridList;
+  };
+  /**
+   * Removes class that visually moves éléments in grid.
+   * @param {string} direction - La direction du mouvement.
+   */
+
+
+  var removeClassVisualMove = function removeClassVisualMove(direction) {
+    var classToRemove;
+
+    if (direction === "ArrowRight") {
+      classToRemove = "deuxMilles--moveRight";
+    } else if (direction === "ArrowLeft") {
+      classToRemove = "deuxMilles--moveLeft";
+    } else if (direction === "ArrowUp") {
+      classToRemove = "deuxMilles--moveUp";
+    } else if (direction === "ArrowDown") {
+      classToRemove = "deuxMilles--moveDown";
+    }
+
+    var elementsWithClassToRemove = document.getElementsByClassName(classToRemove);
 
     while (elementsWithClassToRemove.length) {
-      elementsWithClassToRemove.item(0).classList.remove("deuxMilles--moveRight");
-      elementsWithClassToRemove = document.getElementsByClassName("deuxMilles--moveRight");
+      elementsWithClassToRemove.item(0).classList.remove(classToRemove);
+      elementsWithClassToRemove = document.getElementsByClassName(classToRemove);
+    }
+  };
+  /* ---------------------------------------------------------------- */
+
+  /* ----------------- CONTROLS / MOVES ------------------------------------- */
+
+  /* ---------------------------------------------------------------- */
+
+
+  var keyControl = function keyControl(event) {
+    if (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "ArrowUp" || event.key === "ArrowDown") {
+      var eventKey = event.key;
+
+      if (handleMoves(squares, eventKey)) {
+        setTimeout(function () {
+          checkForWin();
+          generateNumber(squares);
+          refreshScore();
+        }, 250);
+      } else {
+        checkForGameOver(squares);
+      }
     }
   };
 
-  var keyRight = function keyRight() {
-    fillDivsRight();
-    setTimeout(function () {
-      mergeDivsRight();
-      fillDivsRight();
+  var touchControl = function touchControl(direction) {
+    if (handleMoves(squares, direction)) {
       setTimeout(function () {
-        mergeDivsRight();
-        fillDivsRight();
+        checkForWin();
+        generateNumber(squares);
+        refreshScore();
+      }, 250);
+    } else {
+      checkForGameOver(squares);
+    }
+  };
+  /**
+   * Handles squares moves
+   * @param {Object[]} gridList - La liste des divs dans grid
+   * @param {string} direction - La string renvoyée par event.key
+   */
+
+
+  var handleMoves = function handleMoves(gridList, direction) {
+    // On regarde déja si un mvt est possible
+    if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
+      gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
+
+      if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
+        visuallyMoveSquares(gridList, direction);
         setTimeout(function () {
-          mergeDivsRight();
-          fillDivsRight();
-          checkForWin();
-          checkForGameOver();
-          refreshScore();
-        }, 120);
-      }, 120);
-    }, 120);
-  };
+          gridList = refreshDisplay(gridList, direction);
+          gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
 
-  var keyLeft = function keyLeft() {
-    swipeLeft();
-    combineRow(squares, "left");
-    swipeLeft();
-    checkForWin();
-    checkForGameOver();
-    generateNumber(squares);
-    refreshScore();
-  };
+          if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
+            visuallyMoveSquares(gridList, direction);
+            setTimeout(function () {
+              gridList = refreshDisplay(gridList, direction);
+              gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
 
-  var keyUp = function keyUp() {
-    swipeUp();
-    combineColumn(squares, "up");
-    swipeUp();
-    checkForWin();
-    checkForGameOver();
-    generateNumber(squares);
-    refreshScore();
-  };
+              if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
+                visuallyMoveSquares(gridList, direction);
+                setTimeout(function () {
+                  gridList = refreshDisplay(gridList, direction);
+                  gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
 
-  var keyDown = function keyDown() {
-    swipeDown();
-    combineColumn(squares, "down");
-    swipeDown();
-    checkForWin();
-    checkForGameOver();
-    generateNumber(squares);
-    refreshScore();
+                  if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
+                    console.log("itération 4 et dernière");
+                    visuallyMoveSquares(gridList, direction);
+                    setTimeout(function () {
+                      gridList = refreshDisplay(gridList, direction);
+                      gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
+                    }, 35);
+                  }
+                }, 35);
+              }
+            }, 35);
+          }
+        }, 35);
+      }
+
+      return true;
+    } else {
+      return false;
+    }
   };
   /*-------------------------------------------------------------------*/
 
@@ -471,24 +446,30 @@ document.addEventListener("DOMContentLoaded", function () {
   var checkForWin = function checkForWin() {
     for (var i = 0; i < squares.length; i++) {
       if (squares[i].innerHTML == 2048) {
-        resultDisplay.innerHTML = "C Gagné !";
-        document.removeEventListener("keyup", control);
-        endGame();
+        var winnerDisplay = document.getElementById("deuxMilles__winner");
+        winnerDisplay.classList.add("deuxMilles__winner__show");
+        winnerDisplay.addEventListener("click", endGame);
+        var gameOverDisplay = document.getElementById("gameOverDisplay");
+        gameOverDisplay.innerHTML = "FÉLICITATIONS !! (Je suis jaloux)";
       }
     }
+
+    console.log("checkForWin");
   };
 
-  var checkForGameOver = function checkForGameOver() {
-    var compteur = 0;
+  var checkForGameOver = function checkForGameOver(gridList) {
+    // On va chercher s'il reste des 0 ou qu'il est possible de merger des squares
+    var zeros = 0;
 
-    for (var i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 0) compteur++;
+    for (var i = 0; i < gridList.length; i++) {
+      if (gridList[i].innerHTML == 0) zeros++;
     }
 
-    if (compteur === 0) {
-      resultDisplay.innerHTML = "C Perdu";
+    console.log("nb 0 : " + zeros);
+
+    if (!zeros && getDivsToMerge(gridList, "ArrowRight").length === 0 && getDivsToMerge(gridList, "ArrowDown").length === 0 && getDivsToMerge(gridList, "ArrowUp").length === 0 && getDivsToMerge(gridList, "ArrowLeft").length === 0) {
       document.removeEventListener("keyup", control);
-      endGame();
+      setTimeout(endGame, 200);
     }
   };
 
@@ -515,7 +496,65 @@ document.addEventListener("DOMContentLoaded", function () {
     endGameBox.appendChild(registerButton);
     endGameBox.classList.add("show");
   };
+  /*---------------------------------------------------------------------------*/
 
+  /*---------------------------------------------------------------------------*/
+
+  /*---------------------------------------------------------------------------*/
+
+
+  var touchSurface = document.getElementById("deuxMilles__touchsurface");
+  var touchStartX,
+      touchStartY,
+      distanceX,
+      distanceY,
+      minDistanceRequired = 150,
+      //required min distance traveled to be considered swipe
+  maxDistanceOtherDirection = 100,
+      // maximum distance allowed at the same time in perpendicular direction    allowedTime = 200, // maximum time allowed to travel that distance
+  allowedTime = 300,
+      elapsedTime,
+      startTime,
+      swipeDirection;
+  /*----------------------------------------------------------------------------*/
+
+  /*----------------------------------------------------------------------------*/
+
+  /*----------------------------------------------------------------------------*/
+
+  touchSurface.addEventListener("touchstart", function (event) {
+    console.log("touche start");
+    var touch = event.changedTouches[0];
+    swipeDirection = "none";
+    fingerDistance = 0;
+    touchStartX = touch.pageX;
+    touchStartY = touch.pageY;
+    startTime = new Date().getTime(); // record time when finger first makes contact with surface
+
+    event.preventDefault();
+  }, false);
+  touchSurface.addEventListener("touchmove", function (event) {
+    event.preventDefault(); // prevent scrolling when inside DIV
+  }, false);
+  touchSurface.addEventListener("touchend", function (event) {
+    var touch = event.changedTouches[0];
+    distanceX = touch.pageX - touchStartX;
+    distanceY = touch.pageY - touchStartY;
+    elapsedTime = new Date().getTime() - startTime;
+
+    if (elapsedTime < allowedTime) {
+      if (Math.abs(distanceX) > minDistanceRequired && Math.abs(distanceY) < maxDistanceOtherDirection) {
+        if (distanceX > 0) swipeDirection = "ArrowRight";
+        if (distanceX < 0) swipeDirection = "ArrowLeft";
+      } else if (Math.abs(distanceY) > minDistanceRequired && Math.abs(distanceX) < maxDistanceOtherDirection) {
+        if (distanceY > 0) swipeDirection = "ArrowDown";
+        if (distanceY < 0) swipeDirection = "ArrowUp";
+      }
+    }
+
+    touchControl(swipeDirection);
+    event.preventDefault();
+  }, false);
   createBoard();
-  document.addEventListener("keyup", control);
+  document.addEventListener("keyup", keyControl);
 });
