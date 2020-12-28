@@ -544,7 +544,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /*---------------------------------------------------------------------------*/
-  /*---------------------------------------------------------------------------*/
+  /*------------------ FONCTIONS SWIPE ----------------------------------------*/
   /*---------------------------------------------------------------------------*/
 
   const touchSurface = document.getElementById("deuxMilles__touchsurface");
@@ -552,9 +552,9 @@ document.addEventListener("DOMContentLoaded", () => {
     touchStartY,
     distanceX,
     distanceY,
-    minDistanceRequired = 150, //required min distance traveled to be considered swipe
-    maxDistanceOtherDirection = 100, // maximum distance allowed at the same time in perpendicular direction    allowedTime = 200, // maximum time allowed to travel that distance
-    allowedTime = 300,
+    minDistanceRequired = 70, //required min distance traveled to be considered swipe
+    maxDistanceOtherDirection = 60, // maximum distance allowed at the same time in perpendicular direction    allowedTime = 200, // maximum time allowed to travel that distance
+    allowedTime = 350,
     elapsedTime,
     startTime,
     swipeDirection;

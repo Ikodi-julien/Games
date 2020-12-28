@@ -8,35 +8,115 @@
     <title>Ikodi - Games</title>
   </head>
   <body>
-    <header>
-      <nav class="nav">
-        <div class="nav__title" id="nav-title">
-          <a href="../index.html"
-            ><img src="./img/logo_ikodi_lettres.png" alt="logo Ikodi"
-          /></a>
-        </div>
-        <div class="nav__hamburger" id="nav-hamburger">
-          <div class="nav__hamburger__slice"></div>
-        </div>
-        <div class="nav__menu" id="nav-menu">
-          <ul class="nav__list">
-            <li class="nav__link">
-              <a href="../"> Ikodi le site</a>
-            </li>
-            <li class="nav__link">
-              <a href="../multiplicorne/"> Multiplicorne</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
+    <div class="container">
+      <header>
+        <nav class="nav">
+          <div class="nav__title" id="nav-title">
+            <a href="../index.html"
+              ><img src="./img/logo_ikodi_lettres.png" alt="logo Ikodi"
+            /></a>
+          </div>
+          <div class="nav__hamburger" id="nav-hamburger">
+            <div class="nav__hamburger__slice"></div>
+          </div>
+          <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list">
+              <li class="nav__link">
+                <a href="../"> Ikodi le site</a>
+              </li>
+              <li class="nav__link">
+                <a href="../multiplicorne/"> Multiplicorne</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
 
-    <h3 id="gameLinksTitle">Les jeux</h3>
-    <div class="gameLinks">
-      <a href="./doodle_jump/"><button>Ghost-Jump</button></a>
-      <a href="./snake/"><button>Snake</button></a>
-      <a href="./flappy-bird/"><button>Flappy-Bird</button></a>
-      <a href="./2048/"><button>2048</button></a>
+      <h2 id="gameLinksTitle">Les jeux</h2>
+
+      <div class="container__cards">
+        <div class="container__cards__card">
+          <h3>Doodle-Jump</h3>
+          <img src="./img/ghost-jump_20201225.png" alt="image de ghost-jump" />
+          <p>
+            Ici c'est plutôt un "Ghost-Jump", à l'origine ce jeu de plateforme
+            est sorti sur smartphone en 2009.<br />
+            <em>Reproduit ici en 2020</em>
+          </p>
+          <div class="container__cards__card__button__row">
+            <button><a href="./doodle_jump/">Jouer</a></button>
+            <button>
+              <a
+                href="https://github.com/Ikodi-julien/Games/blob/main/doodle_jump/app.js"
+                >Voir le Code</a
+              >
+            </button>
+          </div>
+        </div>
+
+        <div class="container__cards__card">
+          <h3>Snake</h3>
+          <img src="./img/snake_20201225.png" alt="image du jeu snake" />
+          <p>
+            Le snake, bien connu, est un genre de jeu vidéo dans lequel le
+            joueur dirige un serpent qui grandit et constitue ainsi lui-même un
+            obstacle<br />
+            <em>Reproduis ici en 2020</em>
+          </p>
+          <div class="container__cards__card__button__row">
+            <button><a href="./snake/">Jouer</a></button>
+            <button>
+              <a
+                href="https://github.com/Ikodi-julien/Games/blob/main/snake/app.js"
+                >Voir le Code</a
+              >
+            </button>
+          </div>
+        </div>
+
+        <div class="container__cards__card">
+          <h3>Flappy-bird</h3>
+          <img
+            src="./img/flappy-bird_20201225.png"
+            alt="image du jeu flappy-bird"
+          />
+          <p>
+            Flappy Bird est un jeu vidéo d'obstacles développé au Viêt Nam à
+            Hanoï par Nguyễn Hà Đông, développeur de jeu indépendant . Il est
+            sorti en mai 2013 pour iPhone sur iOS 6 (wikipédia).<br />
+            <em>Reproduit ici en 2020</em>
+          </p>
+          <div class="container__cards__card__button__row">
+            <button><a href="./flappy-bird/">Jouer</a></button>
+            <button>
+              <a
+                href="https://github.com/Ikodi-julien/Games/blob/main/flappy-bird/app.js"
+                >Voir le Code</a
+              >
+            </button>
+          </div>
+        </div>
+
+        <div class="container__cards__card">
+          <h3>2048</h3>
+          <img src="./img/2048_20201225.png" alt="image du jeu 2048" />
+          <p>
+            2048 est un jeu vidéo de type puzzle conçu en mars 2014 par le
+            développeur indépendant italien Gabriele Cirulli et publié en ligne
+            sous licence libre via Github le 9 mars 2014. (Wikipédia) <br />
+            <em>Reproduit ici en 2020</em>
+          </p>
+          <div class="container__cards__card__button__row">
+            <button><a href="./2048/">Jouer</a></button>
+            <button>
+              <a
+                href="https://github.com/Ikodi-julien/Games/blob/main/2048/app.js"
+                >Voir le Code</a
+              >
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>

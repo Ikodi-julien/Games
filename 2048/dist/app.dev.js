@@ -498,7 +498,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   /*---------------------------------------------------------------------------*/
 
-  /*---------------------------------------------------------------------------*/
+  /*------------------ FONCTIONS SWIPE ----------------------------------------*/
 
   /*---------------------------------------------------------------------------*/
 
@@ -508,11 +508,11 @@ document.addEventListener("DOMContentLoaded", function () {
       touchStartY,
       distanceX,
       distanceY,
-      minDistanceRequired = 150,
+      minDistanceRequired = 70,
       //required min distance traveled to be considered swipe
-  maxDistanceOtherDirection = 100,
+  maxDistanceOtherDirection = 60,
       // maximum distance allowed at the same time in perpendicular direction    allowedTime = 200, // maximum time allowed to travel that distance
-  allowedTime = 300,
+  allowedTime = 350,
       elapsedTime,
       startTime,
       swipeDirection;

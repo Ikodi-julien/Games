@@ -360,8 +360,9 @@ h3 span {
 /* --- 2048 --- */
 .deuxMilles__grid {
   position: relative;
-  width: 320px;
-  height: 320px;
+  margin: 20px 0;
+  width: 300px;
+  height: 300px;
   display: flex;
   flex-wrap: wrap;
   background-color: var(--color-border-grid-2048);
@@ -383,9 +384,20 @@ h3 span {
 }
 .deuxMilles__touchsurface {
   position: absolute;
+  top: -90px;
   width: 100%;
-  height: 100%;
+  height: 400px;
   z-index: 10;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__touchsurface {
+    height: 450px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__touchsurface {
+    height: 600px;
+  }
 }
 .deuxMilles__square {
   display: flex;
@@ -398,12 +410,22 @@ h3 span {
   text-align: center;
   line-height: 50px;
   vertical-align: middle;
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   border: 8px solid var(--color-border-grid-2048);
   border-radius: 4px;
   transform: translateX(0);
   opacity: 1;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__square {
+    font-size: 45px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__square {
+    font-size: 50px;
+  }
 }
 .deuxMilles__2 {
   color: var(--color-2048-2);
@@ -432,32 +454,92 @@ h3 span {
 .deuxMilles__128 {
   color: var(--color-2048-128);
   background-color: var(--color-2048-back-128);
-  font-size: 45px;
+  font-size: 35px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__128 {
+    font-size: 40px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__128 {
+    font-size: 45px;
+  }
 }
 .deuxMilles__256 {
   color: var(--color-2048-256);
   background-color: var(--color-2048-back-256);
-  font-size: 40px;
+  font-size: 35px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__256 {
+    font-size: 40px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__256 {
+    font-size: 45px;
+  }
 }
 .deuxMilles__512 {
   color: var(--color-2048-512);
   background-color: var(--color-2048-back-512);
-  font-size: 40px;
+  font-size: 35px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__512 {
+    font-size: 40px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__512 {
+    font-size: 45px;
+  }
 }
 .deuxMilles__1024 {
   color: var(--color-2048-1024);
   background-color: var(--color-2048-back-1024);
-  font-size: 35px;
+  font-size: 30px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__1024 {
+    font-size: 35px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__1024 {
+    font-size: 40px;
+  }
 }
 .deuxMilles__2048 {
   color: var(--color-2048-2048);
   background-color: var(--color-2048-back-2048);
-  font-size: 35px;
+  font-size: 30px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__2048 {
+    font-size: 35px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__2048 {
+    font-size: 40px;
+  }
 }
 .deuxMilles__4096 {
   color: var(--color-2048-4096);
   background-color: var(--color-2048-back-4096);
-  font-size: 35px;
+  font-size: 30px;
+}
+@media screen and (min-width: 380px) {
+  .deuxMilles__4096 {
+    font-size: 35px;
+  }
+}
+@media screen and (min-width: 700px) {
+  .deuxMilles__4096 {
+    font-size: 40px;
+  }
 }
 .deuxMilles__winner {
   display: flex;
