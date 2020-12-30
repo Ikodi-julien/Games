@@ -1,20 +1,27 @@
 "use strict";
 
+var _endGame = require("../endGame.js");
+
 document.addEventListener("DOMContentLoaded", function () {
   var gridDisplay = document.querySelector(".deuxMilles__grid");
   var scoreDisplay = document.getElementById("score");
   var width = 4;
   var squares = [];
   var score = 0;
+  var endGameShowed = false;
   /* -----------------------------------------------------------------*/
 
-  /* ----------------- COMMON AND MODEL ------------------------------*/
+  /* ----------------------- BASE ------------------------------------*/
 
   /* -----------------------------------------------------------------*/
+
+  /**
+   * Create divs and append them to the gridDisplay
+   */
 
   var createBoard = function createBoard() {
     for (var i = 0; i < width * width; i++) {
-      square = document.createElement("div");
+      var square = document.createElement("div");
       square.classList.add("deuxMilles__square");
       square.innerHTML = 0;
       gridDisplay.appendChild(square);
@@ -25,24 +32,28 @@ document.addEventListener("DOMContentLoaded", function () {
     generateNumber(squares);
   };
   /**
-   * Add a "2" in an empty square (with "0" inside)
-   * @param {Object[]} squares - List of HTML elts in grid
+   * Add a "2" in an empty square (with previously "0" inside)
+   * @param {Object[]} squaresList - List of HTML elts in grid
    */
 
 
-  var generateNumber = function generateNumber(squares) {
-    var randomNumber = Math.floor(Math.random() * squares.length);
+  var generateNumber = function generateNumber(squaresList) {
+    var randomNumber = Math.floor(Math.random() * squaresList.length);
 
-    if (squares[randomNumber].innerText == 0) {
-      squares[randomNumber].innerText = 2;
-      styleSquares(squares); /// On ajoute une classe anime
+    if (squaresList[randomNumber].innerText == 0) {
+      squaresList[randomNumber].innerText = 2;
+      styleSquares(squaresList); /// On ajoute une classe anime
 
-      squares[randomNumber].classList.add("deuxMilles--newSquare");
-    } else generateNumber(squares);
+      squaresList[randomNumber].classList.add("deuxMilles--newSquare");
+    } else generateNumber(squaresList);
   };
+  /**
+   * Displays the score in scoreDisplay
+   */
+
 
   var refreshScore = function refreshScore() {
-    // On fait la somme des chiffres dans la liste
+    // On fait la somme des chiffres dans la grid
     score = 0;
 
     for (var i = 0; i < squares.length; i++) {
@@ -58,13 +69,13 @@ document.addEventListener("DOMContentLoaded", function () {
   /* ---------------------------------------------------------------*/
 
   /**
-   *
-   * @param {Object[]} gridList - La liste des cases de la grid
+   * set a square' style considering its inner conntent
+   * @param {Object[]} squaresList - La liste des cases de la grid
    */
 
 
-  var styleSquares = function styleSquares(gridList) {
-    gridList.forEach(function (element) {
+  var styleSquares = function styleSquares(squaresList) {
+    squaresList.forEach(function (element) {
       element.classList.remove(element.classList.item(3));
       element.classList.remove(element.classList.item(2));
       element.classList.remove(element.classList.item(1)); // On met la classe en fonction du innerHtml de la case
@@ -126,40 +137,41 @@ document.addEventListener("DOMContentLoaded", function () {
           console.log("Qu'il n'existe ".concat(element));
       }
     });
-    return gridList;
+    return squaresList;
   };
   /*--------------------------------------------------------------*/
 
   /**
-   * Returns a list of index of elts with 0 on their right
-   * @param {Object[]} gridList - Liste des divs dans grid
+   * Returns a list of index of elts with 0 considering the direction given
+   * @param {Object[]} squaresList - Liste des divs dans grid
+   * @param {string} direction
    */
 
 
-  var getDivToMove = function getDivToMove(gridList, direction) {
+  var getSquaresToMove = function getSquaresToMove(squaresList, direction) {
     var indexList = [];
 
     if (direction === "ArrowRight") {
       for (var i = 0; i < 15; i++) {
-        if (i % 4 != 3 && gridList[i].innerText != 0 && gridList[i + 1].innerText == 0) {
+        if (i % 4 != 3 && squaresList[i].innerText != 0 && squaresList[i + 1].innerText == 0) {
           indexList.push(i);
         }
       }
     } else if (direction === "ArrowLeft") {
       for (var _i = 1; _i < 16; _i++) {
-        if (_i % 4 != 0 && gridList[_i].innerText != 0 && gridList[_i - 1].innerText == 0) {
+        if (_i % 4 != 0 && squaresList[_i].innerText != 0 && squaresList[_i - 1].innerText == 0) {
           indexList.push(_i);
         }
       }
     } else if (direction === "ArrowUp") {
       for (var _i2 = 15; _i2 > 3; _i2--) {
-        if (gridList[_i2].innerText != 0 && gridList[_i2 - 4].innerText == 0) {
+        if (squaresList[_i2].innerText != 0 && squaresList[_i2 - 4].innerText == 0) {
           indexList.push(_i2);
         }
       }
     } else if (direction === "ArrowDown") {
       for (var _i3 = 0; _i3 < 12; _i3++) {
-        if (gridList[_i3].innerText != 0 && gridList[_i3 + 4].innerText == 0) {
+        if (squaresList[_i3].innerText != 0 && squaresList[_i3 + 4].innerText == 0) {
           indexList.push(_i3);
         }
       }
@@ -169,20 +181,21 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   /**
    * Returns a list of index in order to merge corresponding elts
-   * @param {Object[]} gridList -  Liste des divs dans grid
+   * @param {Object[]} squaresList -  Liste des divs dans grid
+   * @param {string} direction
    */
 
 
-  var getDivsToMerge = function getDivsToMerge(gridList, direction) {
+  var getSquaresToMerge = function getSquaresToMerge(squaresList, direction) {
     var indexList = [];
 
     if (direction === "ArrowRight") {
       for (var i = 0; i < 15; i++) {
-        if (i != 3 && i % 4 != 3 && gridList[i].innerText != 0 && gridList[i + 1].innerText === gridList[i].innerText) {
+        if (i != 3 && i % 4 != 3 && squaresList[i].innerText != 0 && squaresList[i + 1].innerText === squaresList[i].innerText) {
           indexList.push(i);
 
           if (i != 2 && i % 4 != 2) {
-            if (gridList[i].innerText === gridList[i + 2].innerText) {
+            if (squaresList[i].innerText === squaresList[i + 2].innerText) {
               indexList.pop();
             }
           }
@@ -190,11 +203,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else if (direction === "ArrowLeft") {
       for (var _i4 = 1; _i4 < 16; _i4++) {
-        if (_i4 % 4 != 0 && gridList[_i4].innerText != 0 && gridList[_i4 - 1].innerText === gridList[_i4].innerText) {
+        if (_i4 % 4 != 0 && squaresList[_i4].innerText != 0 && squaresList[_i4 - 1].innerText === squaresList[_i4].innerText) {
           indexList.push(_i4);
 
           if (_i4 != 1 && _i4 % 4 != 1) {
-            if (gridList[_i4].innerText === gridList[_i4 - 2].innerText) {
+            if (squaresList[_i4].innerText === squaresList[_i4 - 2].innerText) {
               indexList.pop();
             }
           }
@@ -202,20 +215,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else if (direction === "ArrowUp") {
       for (var _i5 = 15; _i5 > 3; _i5--) {
-        if (gridList[_i5].innerText != 0 && gridList[_i5 - 4].innerText === gridList[_i5].innerText) {
+        if (squaresList[_i5].innerText != 0 && squaresList[_i5 - 4].innerText === squaresList[_i5].innerText) {
           indexList.push(_i5);
 
-          if (_i5 > 7 && gridList[_i5].innerText === gridList[_i5 - 8].innerText) {
+          if (_i5 > 7 && squaresList[_i5].innerText === squaresList[_i5 - 8].innerText) {
             indexList.pop();
           }
         }
       }
     } else if (direction === "ArrowDown") {
       for (var _i6 = 0; _i6 < 12; _i6++) {
-        if (gridList[_i6].innerText != 0 && gridList[_i6 + 4].innerText === gridList[_i6].innerText) {
+        if (squaresList[_i6].innerText != 0 && squaresList[_i6 + 4].innerText === squaresList[_i6].innerText) {
           indexList.push(_i6);
 
-          if (_i6 < 8 && gridList[_i6].innerText === gridList[_i6 + 8].innerText) {
+          if (_i6 < 8 && squaresList[_i6].innerText === squaresList[_i6 + 8].innerText) {
             indexList.pop();
           }
         }
@@ -226,105 +239,122 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   /**
    * Visually moves some elements by adding a class
-   * @param {Object[]} gridList - Liste des divs dans grid, elt HTML
+   * @param {Object[]} squaresList - Liste des divs dans grid, elt HTML
+   * @param {string} direction
    */
 
 
-  var visuallyMoveSquares = function visuallyMoveSquares(gridList, direction) {
+  var visuallyMoveSquares = function visuallyMoveSquares(squaresList, direction) {
     // On récupère l'index des divs à déplacer à droite
-    var listIndex = getDivToMove(gridList, direction); //
+    var listIndex = getSquaresToMove(squaresList, direction); //
 
     if (direction === "ArrowRight") {
       listIndex.forEach(function (index) {
-        gridList[index].classList.add("deuxMilles--moveRight");
+        squaresList[index].classList.add("deuxMilles--moveRight");
       });
     } else if (direction === "ArrowLeft") {
       listIndex.forEach(function (index) {
-        gridList[index].classList.add("deuxMilles--moveLeft");
+        squaresList[index].classList.add("deuxMilles--moveLeft");
       });
     } else if (direction === "ArrowUp") {
       listIndex.forEach(function (index) {
-        gridList[index].classList.add("deuxMilles--moveUp");
+        squaresList[index].classList.add("deuxMilles--moveUp");
       });
     } else if (direction === "ArrowDown") {
       listIndex.forEach(function (index) {
-        gridList[index].classList.add("deuxMilles--moveDown");
+        squaresList[index].classList.add("deuxMilles--moveDown");
       });
     }
+  };
+  /**
+   * Visually merges some elements by adding a class
+   * @param {Object[]} squaresList - Liste des divs dans grid, elt HTML
+   * @param {string} direction
+   */
+
+
+  var visuallyMergeSquares = function visuallyMergeSquares(squaresList, direction) {
+    // On récupère l'index des divs à déplacer à droite
+    getSquaresToMerge(squaresList, direction).forEach(function (index) {
+      if (direction === "ArrowRight") {
+        squaresList[index].classList.add("deuxMilles--mergeRight");
+      } else if (direction === "ArrowLeft") {
+        squaresList[index].classList.add("deuxMilles--mergeLeft");
+      } else if (direction === "ArrowUp") {
+        squaresList[index].classList.add("deuxMilles--mergeUp");
+      } else if (direction === "ArrowDown") {
+        squaresList[index].classList.add("deuxMilles--mergeDown");
+      }
+    });
   };
   /**
    *Changes squares value, put them in place, style them and do it again
-   * @param {Object[]} gridList - Liste des cases dans la grid
+   * @param {Object[]} squaresList - Liste des cases dans la grid
+   * @param {string} direction
    */
 
 
-  var refreshDisplay = function refreshDisplay(gridList, direction) {
-    var listIndexToMove = getDivToMove(gridList, direction); // On change les valeurs dans les divs
+  var refreshDisplay = function refreshDisplay(squaresList, direction) {
+    var listIndexToMove = getSquaresToMove(squaresList, direction); // On change les valeurs dans les divs
 
-    gridList = replaceElementInnerText(direction, listIndexToMove, gridList); // on remet en place les divs
+    squaresList = replaceElementInnerText(direction, listIndexToMove, squaresList); // on remet en place les divs
 
     removeClassVisualMove(direction); // On refait le style du tableau
 
-    styleSquares(gridList);
-    return gridList;
+    styleSquares(squaresList);
+    return squaresList;
   };
   /**
-   * Merge squares to the right
-   * @param {number[]} listIndex - La liste des divs dans grid
-   * @param {Object[]} gridList - La liste des divs dans grid
+   * Merge squares
+   * @param {string} direction
+   * @param {number[]} listIndex - La liste des index des divs concernées
+   * @param {Object[]} squaresList - La liste des divs dans grid
    */
 
 
-  var mergeDivs = function mergeDivs(direction, listIndex, gridList) {
-    gridList = replaceElementInnerText(direction, listIndex, gridList); // on remet en place les divs
+  var mergeDivs = function mergeDivs(direction, listIndex, squaresList) {
+    squaresList = replaceElementInnerText(direction, listIndex, squaresList); // on remet en place les divs
 
     removeClassVisualMove(direction); // On refait le style du tableau
 
-    return styleSquares(gridList);
+    return styleSquares(squaresList);
   };
   /**
    * Do the math and replace text value in squares
-   * @param {Object[]} listIndex - list d'index donnée par getDivsToMove ***
-   * @param {Object[]} listOfElements - la liste des eléments dans grid
+   * @param {string} direction
+   * @param {Object[]} listIndex - liste d'index donnée par getDivsToMove ***
+   * @param {Object[]} squaresList - la liste des eléments dans grid
    */
 
 
-  var replaceElementInnerText = function replaceElementInnerText(direction, indexList, gridList) {
-    if (direction === "ArrowRight") {
-      indexList.forEach(function (index) {
-        var nb1 = parseInt(gridList[index].innerHTML);
-        var nb2 = parseInt(gridList[index + 1].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index + 1].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowLeft") {
-      indexList.forEach(function (index) {
-        var nb1 = parseInt(gridList[index].innerHTML);
-        var nb2 = parseInt(gridList[index - 1].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index - 1].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowUp") {
-      indexList.forEach(function (index) {
-        var nb1 = parseInt(gridList[index].innerHTML);
-        var nb2 = parseInt(gridList[index - 4].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index - 4].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowDown") {
-      indexList.forEach(function (index) {
-        var nb1 = parseInt(gridList[index].innerHTML);
-        var nb2 = parseInt(gridList[index + 4].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index + 4].innerHTML = nb2;
-      });
-    }
+  var replaceElementInnerText = function replaceElementInnerText(direction, indexList, squaresList) {
+    var nbToBeNull, nbSum;
+    indexList.forEach(function (index) {
+      nbToBeNull = parseInt(squaresList[index].innerHTML);
 
-    return gridList;
+      if (direction === "ArrowRight") {
+        nbSum = parseInt(squaresList[index + 1].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index + 1].innerHTML = nbSum;
+      } else if (direction === "ArrowLeft") {
+        nbSum = parseInt(squaresList[index - 1].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index - 1].innerHTML = nbSum;
+      } else if (direction === "ArrowUp") {
+        nbSum = parseInt(squaresList[index - 4].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index - 4].innerHTML = nbSum;
+      } else if (direction === "ArrowDown") {
+        nbSum = parseInt(squaresList[index + 4].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index + 4].innerHTML = nbSum;
+      }
+    });
+    return squaresList;
   };
   /**
    * Removes class that visually moves éléments in grid.
@@ -354,9 +384,14 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   /* ---------------------------------------------------------------- */
 
-  /* ----------------- CONTROLS / MOVES ------------------------------------- */
+  /* ----------------- CONTROLS / HANDLING MOVES ------------------------------------- */
 
   /* ---------------------------------------------------------------- */
+
+  /**
+   * Initiate squares movements using event.key
+   * @param {Object} event
+   */
 
 
   var keyControl = function keyControl(event) {
@@ -374,6 +409,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   };
+  /**
+   * Initiate squares movements using touch events
+   * @param {string} direction
+   */
+
 
   var touchControl = function touchControl(direction) {
     if (handleMoves(squares, direction)) {
@@ -388,49 +428,21 @@ document.addEventListener("DOMContentLoaded", function () {
   };
   /**
    * Handles squares moves
-   * @param {Object[]} gridList - La liste des divs dans grid
+   * @param {Object[]} squaresList - La liste des divs dans grid
    * @param {string} direction - La string renvoyée par event.key
    */
 
 
-  var handleMoves = function handleMoves(gridList, direction) {
+  var handleMoves = function handleMoves(squaresList, direction) {
     // On regarde déja si un mvt est possible
-    if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
-      gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
-
-      if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
-        visuallyMoveSquares(gridList, direction);
-        setTimeout(function () {
-          gridList = refreshDisplay(gridList, direction);
-          gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
-
-          if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
-            visuallyMoveSquares(gridList, direction);
-            setTimeout(function () {
-              gridList = refreshDisplay(gridList, direction);
-              gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
-
-              if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
-                visuallyMoveSquares(gridList, direction);
-                setTimeout(function () {
-                  gridList = refreshDisplay(gridList, direction);
-                  gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
-
-                  if (getDivToMove(gridList, direction).length || getDivsToMerge(gridList, direction).length) {
-                    console.log("itération 4 et dernière");
-                    visuallyMoveSquares(gridList, direction);
-                    setTimeout(function () {
-                      gridList = refreshDisplay(gridList, direction);
-                      gridList = mergeDivs(direction, getDivsToMerge(gridList, direction), gridList);
-                    }, 35);
-                  }
-                }, 35);
-              }
-            }, 35);
-          }
-        }, 35);
-      }
-
+    if (getSquaresToMove(squaresList, direction).length || getSquaresToMerge(squaresList, direction).length) {
+      visuallyMoveSquares(squaresList, direction);
+      visuallyMergeSquares(squaresList, direction);
+      setTimeout(function () {
+        squaresList = refreshDisplay(squaresList, direction);
+        squaresList = mergeDivs(direction, getSquaresToMerge(squaresList, direction), squaresList);
+        handleMoves(squaresList, direction);
+      }, 50);
       return true;
     } else {
       return false;
@@ -444,64 +456,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   var checkForWin = function checkForWin() {
+    // On regarde si une case contient 2048
     for (var i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 2048) {
+      if (squares[i].innerHTML == 8) {
         var winnerDisplay = document.getElementById("deuxMilles__winner");
         winnerDisplay.classList.add("deuxMilles__winner__show");
-        winnerDisplay.addEventListener("click", endGame);
         var gameOverDisplay = document.getElementById("gameOverDisplay");
         gameOverDisplay.innerHTML = "FÉLICITATIONS !! (Je suis jaloux)";
+        winnerDisplay.addEventListener("click", function () {
+          if (!endGameShowed) {
+            (0, _endGame.endGame)(score);
+            endGameShowed = true;
+          }
+        });
       }
     }
 
     console.log("checkForWin");
   };
 
-  var checkForGameOver = function checkForGameOver(gridList) {
+  var checkForGameOver = function checkForGameOver(squaresList) {
     // On va chercher s'il reste des 0 ou qu'il est possible de merger des squares
     var zeros = 0;
 
-    for (var i = 0; i < gridList.length; i++) {
-      if (gridList[i].innerHTML == 0) zeros++;
+    for (var i = 0; i < squaresList.length; i++) {
+      if (squaresList[i].innerHTML == 0) zeros++;
     }
 
     console.log("nb 0 : " + zeros);
 
-    if (!zeros && getDivsToMerge(gridList, "ArrowRight").length === 0 && getDivsToMerge(gridList, "ArrowDown").length === 0 && getDivsToMerge(gridList, "ArrowUp").length === 0 && getDivsToMerge(gridList, "ArrowLeft").length === 0) {
-      document.removeEventListener("keyup", control);
-      setTimeout(endGame, 200);
+    if (!zeros && getSquaresToMerge(squaresList, "ArrowRight").length === 0 && getSquaresToMerge(squaresList, "ArrowDown").length === 0 && getSquaresToMerge(squaresList, "ArrowUp").length === 0 && getSquaresToMerge(squaresList, "ArrowLeft").length === 0) {
+      document.removeEventListener("keyup", keyControl);
+      setTimeout(function () {
+        (0, _endGame.endGame)(score);
+      }, 150);
+      endGameShowed = true;
     }
   };
 
-  var endGame = function endGame() {
-    var endGameBox = document.querySelector(".endGameBox"); // Ajout d'un bouton reload
-
-    var reloadButton = document.createElement("button");
-    reloadButton.innerHTML = "Recommencer";
-    endGameBox.appendChild(reloadButton);
-    reloadButton.addEventListener("click", function () {
-      window.location.reload(true);
-    }); // Créer le boutton enregistrer
-
-    var registerButton = document.createElement("button");
-    registerButton.innerHTML = "Enregistrer ma perf"; // Lier le lien vers php
-
-    registerButton.addEventListener("click", function () {
-      // Récupérer le pseudo et commentaire
-      var pseudo = document.getElementById("pseudo").value;
-      var comment = document.getElementById("comment").value;
-      document.location.href = "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
-    }); // On ajoute les boutons et on affiche le tout
-
-    endGameBox.appendChild(registerButton);
-    endGameBox.classList.add("show");
-  };
+  createBoard();
+  document.addEventListener("keyup", keyControl);
   /*---------------------------------------------------------------------------*/
 
   /*------------------ FONCTIONS SWIPE ----------------------------------------*/
 
   /*---------------------------------------------------------------------------*/
-
 
   var touchSurface = document.getElementById("deuxMilles__touchsurface");
   var touchStartX,
@@ -516,10 +515,6 @@ document.addEventListener("DOMContentLoaded", function () {
       elapsedTime,
       startTime,
       swipeDirection;
-  /*----------------------------------------------------------------------------*/
-
-  /*----------------------------------------------------------------------------*/
-
   /*----------------------------------------------------------------------------*/
 
   touchSurface.addEventListener("touchstart", function (event) {
@@ -555,6 +550,4 @@ document.addEventListener("DOMContentLoaded", function () {
     touchControl(swipeDirection);
     event.preventDefault();
   }, false);
-  createBoard();
-  document.addEventListener("keyup", keyControl);
 });

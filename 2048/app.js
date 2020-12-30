@@ -1,3 +1,5 @@
+import { endGame } from "../endGame.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const gridDisplay = document.querySelector(".deuxMilles__grid");
   const scoreDisplay = document.getElementById("score");
@@ -5,13 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let squares = [];
   let score = 0;
+  let endGameShowed = false;
 
   /* -----------------------------------------------------------------*/
-  /* ----------------- COMMON AND MODEL ------------------------------*/
+  /* ----------------------- BASE ------------------------------------*/
   /* -----------------------------------------------------------------*/
+
+  /**
+   * Create divs and append them to the gridDisplay
+   */
   const createBoard = () => {
     for (let i = 0; i < width * width; i++) {
-      square = document.createElement("div");
+      let square = document.createElement("div");
       square.classList.add("deuxMilles__square");
       square.innerHTML = 0;
       gridDisplay.appendChild(square);
@@ -22,22 +29,25 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /**
-   * Add a "2" in an empty square (with "0" inside)
-   * @param {Object[]} squares - List of HTML elts in grid
+   * Add a "2" in an empty square (with previously "0" inside)
+   * @param {Object[]} squaresList - List of HTML elts in grid
    */
-  const generateNumber = (squares) => {
-    let randomNumber = Math.floor(Math.random() * squares.length);
+  const generateNumber = (squaresList) => {
+    let randomNumber = Math.floor(Math.random() * squaresList.length);
 
-    if (squares[randomNumber].innerText == 0) {
-      squares[randomNumber].innerText = 2;
-      styleSquares(squares);
+    if (squaresList[randomNumber].innerText == 0) {
+      squaresList[randomNumber].innerText = 2;
+      styleSquares(squaresList);
       /// On ajoute une classe anime
-      squares[randomNumber].classList.add("deuxMilles--newSquare");
-    } else generateNumber(squares);
+      squaresList[randomNumber].classList.add("deuxMilles--newSquare");
+    } else generateNumber(squaresList);
   };
 
+  /**
+   * Displays the score in scoreDisplay
+   */
   const refreshScore = () => {
-    // On fait la somme des chiffres dans la liste
+    // On fait la somme des chiffres dans la grid
     score = 0;
     for (let i = 0; i < squares.length; i++) {
       score += parseInt(squares[i].innerHTML);
@@ -50,11 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------------------------------------------------------------*/
 
   /**
-   *
-   * @param {Object[]} gridList - La liste des cases de la grid
+   * set a square' style considering its inner conntent
+   * @param {Object[]} squaresList - La liste des cases de la grid
    */
-  const styleSquares = (gridList) => {
-    gridList.forEach((element) => {
+  const styleSquares = (squaresList) => {
+    squaresList.forEach((element) => {
       element.classList.remove(element.classList.item(3));
       element.classList.remove(element.classList.item(2));
       element.classList.remove(element.classList.item(1));
@@ -103,24 +113,25 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log(`Qu'il n'existe ${element}`);
       }
     });
-    return gridList;
+    return squaresList;
   };
 
   /*--------------------------------------------------------------*/
 
   /**
-   * Returns a list of index of elts with 0 on their right
-   * @param {Object[]} gridList - Liste des divs dans grid
+   * Returns a list of index of elts with 0 considering the direction given
+   * @param {Object[]} squaresList - Liste des divs dans grid
+   * @param {string} direction
    */
-  const getDivToMove = (gridList, direction) => {
+  const getSquaresToMove = (squaresList, direction) => {
     var indexList = [];
 
     if (direction === "ArrowRight") {
       for (let i = 0; i < 15; i++) {
         if (
           i % 4 != 3 &&
-          gridList[i].innerText != 0 &&
-          gridList[i + 1].innerText == 0
+          squaresList[i].innerText != 0 &&
+          squaresList[i + 1].innerText == 0
         ) {
           indexList.push(i);
         }
@@ -129,21 +140,27 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 1; i < 16; i++) {
         if (
           i % 4 != 0 &&
-          gridList[i].innerText != 0 &&
-          gridList[i - 1].innerText == 0
+          squaresList[i].innerText != 0 &&
+          squaresList[i - 1].innerText == 0
         ) {
           indexList.push(i);
         }
       }
     } else if (direction === "ArrowUp") {
       for (let i = 15; i > 3; i--) {
-        if (gridList[i].innerText != 0 && gridList[i - 4].innerText == 0) {
+        if (
+          squaresList[i].innerText != 0 &&
+          squaresList[i - 4].innerText == 0
+        ) {
           indexList.push(i);
         }
       }
     } else if (direction === "ArrowDown") {
       for (let i = 0; i < 12; i++) {
-        if (gridList[i].innerText != 0 && gridList[i + 4].innerText == 0) {
+        if (
+          squaresList[i].innerText != 0 &&
+          squaresList[i + 4].innerText == 0
+        ) {
           indexList.push(i);
         }
       }
@@ -154,9 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * Returns a list of index in order to merge corresponding elts
-   * @param {Object[]} gridList -  Liste des divs dans grid
+   * @param {Object[]} squaresList -  Liste des divs dans grid
+   * @param {string} direction
    */
-  const getDivsToMerge = (gridList, direction) => {
+  const getSquaresToMerge = (squaresList, direction) => {
     let indexList = [];
 
     if (direction === "ArrowRight") {
@@ -164,13 +182,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (
           i != 3 &&
           i % 4 != 3 &&
-          gridList[i].innerText != 0 &&
-          gridList[i + 1].innerText === gridList[i].innerText
+          squaresList[i].innerText != 0 &&
+          squaresList[i + 1].innerText === squaresList[i].innerText
         ) {
           indexList.push(i);
 
           if (i != 2 && i % 4 != 2) {
-            if (gridList[i].innerText === gridList[i + 2].innerText) {
+            if (squaresList[i].innerText === squaresList[i + 2].innerText) {
               indexList.pop();
             }
           }
@@ -180,13 +198,13 @@ document.addEventListener("DOMContentLoaded", () => {
       for (let i = 1; i < 16; i++) {
         if (
           i % 4 != 0 &&
-          gridList[i].innerText != 0 &&
-          gridList[i - 1].innerText === gridList[i].innerText
+          squaresList[i].innerText != 0 &&
+          squaresList[i - 1].innerText === squaresList[i].innerText
         ) {
           indexList.push(i);
 
           if (i != 1 && i % 4 != 1) {
-            if (gridList[i].innerText === gridList[i - 2].innerText) {
+            if (squaresList[i].innerText === squaresList[i - 2].innerText) {
               indexList.pop();
             }
           }
@@ -195,12 +213,15 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (direction === "ArrowUp") {
       for (let i = 15; i > 3; i--) {
         if (
-          gridList[i].innerText != 0 &&
-          gridList[i - 4].innerText === gridList[i].innerText
+          squaresList[i].innerText != 0 &&
+          squaresList[i - 4].innerText === squaresList[i].innerText
         ) {
           indexList.push(i);
 
-          if (i > 7 && gridList[i].innerText === gridList[i - 8].innerText) {
+          if (
+            i > 7 &&
+            squaresList[i].innerText === squaresList[i - 8].innerText
+          ) {
             indexList.pop();
           }
         }
@@ -208,12 +229,15 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (direction === "ArrowDown") {
       for (let i = 0; i < 12; i++) {
         if (
-          gridList[i].innerText != 0 &&
-          gridList[i + 4].innerText === gridList[i].innerText
+          squaresList[i].innerText != 0 &&
+          squaresList[i + 4].innerText === squaresList[i].innerText
         ) {
           indexList.push(i);
 
-          if (i < 8 && gridList[i].innerText === gridList[i + 8].innerText) {
+          if (
+            i < 8 &&
+            squaresList[i].innerText === squaresList[i + 8].innerText
+          ) {
             indexList.pop();
           }
         }
@@ -225,106 +249,126 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * Visually moves some elements by adding a class
-   * @param {Object[]} gridList - Liste des divs dans grid, elt HTML
+   * @param {Object[]} squaresList - Liste des divs dans grid, elt HTML
+   * @param {string} direction
    */
-  const visuallyMoveSquares = (gridList, direction) => {
+  const visuallyMoveSquares = (squaresList, direction) => {
     // On récupère l'index des divs à déplacer à droite
-    let listIndex = getDivToMove(gridList, direction);
+    let listIndex = getSquaresToMove(squaresList, direction);
     //
     if (direction === "ArrowRight") {
       listIndex.forEach((index) => {
-        gridList[index].classList.add("deuxMilles--moveRight");
+        squaresList[index].classList.add("deuxMilles--moveRight");
       });
     } else if (direction === "ArrowLeft") {
       listIndex.forEach((index) => {
-        gridList[index].classList.add("deuxMilles--moveLeft");
+        squaresList[index].classList.add("deuxMilles--moveLeft");
       });
     } else if (direction === "ArrowUp") {
       listIndex.forEach((index) => {
-        gridList[index].classList.add("deuxMilles--moveUp");
+        squaresList[index].classList.add("deuxMilles--moveUp");
       });
     } else if (direction === "ArrowDown") {
       listIndex.forEach((index) => {
-        gridList[index].classList.add("deuxMilles--moveDown");
+        squaresList[index].classList.add("deuxMilles--moveDown");
       });
     }
+  };
+
+  /**
+   * Visually merges some elements by adding a class
+   * @param {Object[]} squaresList - Liste des divs dans grid, elt HTML
+   * @param {string} direction
+   */
+  const visuallyMergeSquares = (squaresList, direction) => {
+    // On récupère l'index des divs à déplacer à droite
+    getSquaresToMerge(squaresList, direction).forEach((index) => {
+      if (direction === "ArrowRight") {
+        squaresList[index].classList.add("deuxMilles--mergeRight");
+      } else if (direction === "ArrowLeft") {
+        squaresList[index].classList.add("deuxMilles--mergeLeft");
+      } else if (direction === "ArrowUp") {
+        squaresList[index].classList.add("deuxMilles--mergeUp");
+      } else if (direction === "ArrowDown") {
+        squaresList[index].classList.add("deuxMilles--mergeDown");
+      }
+    });
   };
 
   /**
    *Changes squares value, put them in place, style them and do it again
-   * @param {Object[]} gridList - Liste des cases dans la grid
+   * @param {Object[]} squaresList - Liste des cases dans la grid
+   * @param {string} direction
    */
-  const refreshDisplay = (gridList, direction) => {
-    let listIndexToMove = getDivToMove(gridList, direction);
+  const refreshDisplay = (squaresList, direction) => {
+    let listIndexToMove = getSquaresToMove(squaresList, direction);
 
     // On change les valeurs dans les divs
-    gridList = replaceElementInnerText(direction, listIndexToMove, gridList);
+    squaresList = replaceElementInnerText(
+      direction,
+      listIndexToMove,
+      squaresList
+    );
 
     // on remet en place les divs
     removeClassVisualMove(direction);
 
     // On refait le style du tableau
-    styleSquares(gridList);
+    styleSquares(squaresList);
 
-    return gridList;
+    return squaresList;
   };
 
   /**
-   * Merge squares to the right
-   * @param {number[]} listIndex - La liste des divs dans grid
-   * @param {Object[]} gridList - La liste des divs dans grid
+   * Merge squares
+   * @param {string} direction
+   * @param {number[]} listIndex - La liste des index des divs concernées
+   * @param {Object[]} squaresList - La liste des divs dans grid
    */
-  const mergeDivs = (direction, listIndex, gridList) => {
-    gridList = replaceElementInnerText(direction, listIndex, gridList);
+  const mergeDivs = (direction, listIndex, squaresList) => {
+    squaresList = replaceElementInnerText(direction, listIndex, squaresList);
 
     // on remet en place les divs
     removeClassVisualMove(direction);
 
     // On refait le style du tableau
-    return styleSquares(gridList);
+    return styleSquares(squaresList);
   };
 
   /**
    * Do the math and replace text value in squares
-   * @param {Object[]} listIndex - list d'index donnée par getDivsToMove ***
-   * @param {Object[]} listOfElements - la liste des eléments dans grid
+   * @param {string} direction
+   * @param {Object[]} listIndex - liste d'index donnée par getDivsToMove ***
+   * @param {Object[]} squaresList - la liste des eléments dans grid
    */
-  const replaceElementInnerText = (direction, indexList, gridList) => {
-    if (direction === "ArrowRight") {
-      indexList.forEach((index) => {
-        let nb1 = parseInt(gridList[index].innerHTML);
-        let nb2 = parseInt(gridList[index + 1].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index + 1].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowLeft") {
-      indexList.forEach((index) => {
-        let nb1 = parseInt(gridList[index].innerHTML);
-        let nb2 = parseInt(gridList[index - 1].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index - 1].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowUp") {
-      indexList.forEach((index) => {
-        let nb1 = parseInt(gridList[index].innerHTML);
-        let nb2 = parseInt(gridList[index - 4].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index - 4].innerHTML = nb2;
-      });
-    } else if (direction === "ArrowDown") {
-      indexList.forEach((index) => {
-        let nb1 = parseInt(gridList[index].innerHTML);
-        let nb2 = parseInt(gridList[index + 4].innerHTML);
-        nb2 += nb1;
-        gridList[index].innerHTML = 0;
-        gridList[index + 4].innerHTML = nb2;
-      });
-    }
+  const replaceElementInnerText = (direction, indexList, squaresList) => {
+    let nbToBeNull, nbSum;
+    indexList.forEach((index) => {
+      nbToBeNull = parseInt(squaresList[index].innerHTML);
+      if (direction === "ArrowRight") {
+        nbSum = parseInt(squaresList[index + 1].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index + 1].innerHTML = nbSum;
+      } else if (direction === "ArrowLeft") {
+        nbSum = parseInt(squaresList[index - 1].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index - 1].innerHTML = nbSum;
+      } else if (direction === "ArrowUp") {
+        nbSum = parseInt(squaresList[index - 4].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index - 4].innerHTML = nbSum;
+      } else if (direction === "ArrowDown") {
+        nbSum = parseInt(squaresList[index + 4].innerHTML);
+        nbSum += nbToBeNull;
+        squaresList[index].innerHTML = 0;
+        squaresList[index + 4].innerHTML = nbSum;
+      }
+    });
 
-    return gridList;
+    return squaresList;
   };
 
   /**
@@ -356,9 +400,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /* ---------------------------------------------------------------- */
-  /* ----------------- CONTROLS / MOVES ------------------------------------- */
+  /* ----------------- CONTROLS / HANDLING MOVES ------------------------------------- */
   /* ---------------------------------------------------------------- */
 
+  /**
+   * Initiate squares movements using event.key
+   * @param {Object} event
+   */
   const keyControl = (event) => {
     if (
       event.key === "ArrowRight" ||
@@ -380,6 +428,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  /**
+   * Initiate squares movements using touch events
+   * @param {string} direction
+   */
   const touchControl = (direction) => {
     if (handleMoves(squares, direction)) {
       setTimeout(() => {
@@ -394,154 +446,85 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /**
    * Handles squares moves
-   * @param {Object[]} gridList - La liste des divs dans grid
+   * @param {Object[]} squaresList - La liste des divs dans grid
    * @param {string} direction - La string renvoyée par event.key
    */
-  const handleMoves = (gridList, direction) => {
+  const handleMoves = (squaresList, direction) => {
     // On regarde déja si un mvt est possible
     if (
-      getDivToMove(gridList, direction).length ||
-      getDivsToMerge(gridList, direction).length
+      getSquaresToMove(squaresList, direction).length ||
+      getSquaresToMerge(squaresList, direction).length
     ) {
-      gridList = mergeDivs(
-        direction,
-        getDivsToMerge(gridList, direction),
-        gridList
-      );
+      visuallyMoveSquares(squaresList, direction);
+      visuallyMergeSquares(squaresList, direction);
+      setTimeout(() => {
+        squaresList = refreshDisplay(squaresList, direction);
+        squaresList = mergeDivs(
+          direction,
+          getSquaresToMerge(squaresList, direction),
+          squaresList
+        );
 
-      if (
-        getDivToMove(gridList, direction).length ||
-        getDivsToMerge(gridList, direction).length
-      ) {
-        visuallyMoveSquares(gridList, direction);
-        setTimeout(() => {
-          gridList = refreshDisplay(gridList, direction);
-          gridList = mergeDivs(
-            direction,
-            getDivsToMerge(gridList, direction),
-            gridList
-          );
+        handleMoves(squaresList, direction);
+      }, 50);
 
-          if (
-            getDivToMove(gridList, direction).length ||
-            getDivsToMerge(gridList, direction).length
-          ) {
-            visuallyMoveSquares(gridList, direction);
-            setTimeout(() => {
-              gridList = refreshDisplay(gridList, direction);
-              gridList = mergeDivs(
-                direction,
-                getDivsToMerge(gridList, direction),
-                gridList
-              );
-
-              if (
-                getDivToMove(gridList, direction).length ||
-                getDivsToMerge(gridList, direction).length
-              ) {
-                visuallyMoveSquares(gridList, direction);
-                setTimeout(() => {
-                  gridList = refreshDisplay(gridList, direction);
-                  gridList = mergeDivs(
-                    direction,
-                    getDivsToMerge(gridList, direction),
-                    gridList
-                  );
-
-                  if (
-                    getDivToMove(gridList, direction).length ||
-                    getDivsToMerge(gridList, direction).length
-                  ) {
-                    console.log("itération 4 et dernière");
-                    visuallyMoveSquares(gridList, direction);
-                    setTimeout(() => {
-                      gridList = refreshDisplay(gridList, direction);
-                      gridList = mergeDivs(
-                        direction,
-                        getDivsToMerge(gridList, direction),
-                        gridList
-                      );
-                    }, 35);
-                  }
-                }, 35);
-              }
-            }, 35);
-          }
-        }, 35);
-      }
       return true;
     } else {
       return false;
     }
   };
+
   /*-------------------------------------------------------------------*/
   /*-------------- CHECKS AND ENDGAME ---------------------------------*/
   /*-------------------------------------------------------------------*/
   const checkForWin = () => {
+    // On regarde si une case contient 2048
     for (let i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 2048) {
+      if (squares[i].innerHTML == 8) {
         const winnerDisplay = document.getElementById("deuxMilles__winner");
         winnerDisplay.classList.add("deuxMilles__winner__show");
 
-        winnerDisplay.addEventListener("click", endGame);
-
         const gameOverDisplay = document.getElementById("gameOverDisplay");
         gameOverDisplay.innerHTML = "FÉLICITATIONS !! (Je suis jaloux)";
+
+        winnerDisplay.addEventListener("click", () => {
+          if (!endGameShowed) {
+            endGame(score);
+            endGameShowed = true;
+          }
+        });
       }
     }
     console.log("checkForWin");
   };
 
-  const checkForGameOver = (gridList) => {
+  const checkForGameOver = (squaresList) => {
     // On va chercher s'il reste des 0 ou qu'il est possible de merger des squares
     let zeros = 0;
 
-    for (let i = 0; i < gridList.length; i++) {
-      if (gridList[i].innerHTML == 0) zeros++;
+    for (let i = 0; i < squaresList.length; i++) {
+      if (squaresList[i].innerHTML == 0) zeros++;
     }
     console.log("nb 0 : " + zeros);
     if (
       !zeros &&
-      getDivsToMerge(gridList, "ArrowRight").length === 0 &&
-      getDivsToMerge(gridList, "ArrowDown").length === 0 &&
-      getDivsToMerge(gridList, "ArrowUp").length === 0 &&
-      getDivsToMerge(gridList, "ArrowLeft").length === 0
+      getSquaresToMerge(squaresList, "ArrowRight").length === 0 &&
+      getSquaresToMerge(squaresList, "ArrowDown").length === 0 &&
+      getSquaresToMerge(squaresList, "ArrowUp").length === 0 &&
+      getSquaresToMerge(squaresList, "ArrowLeft").length === 0
     ) {
-      document.removeEventListener("keyup", control);
+      document.removeEventListener("keyup", keyControl);
 
-      setTimeout(endGame, 200);
+      setTimeout(() => {
+        endGame(score);
+      }, 150);
+      endGameShowed = true;
     }
   };
 
-  const endGame = () => {
-    const endGameBox = document.querySelector(".endGameBox");
+  createBoard();
 
-    // Ajout d'un bouton reload
-    const reloadButton = document.createElement("button");
-    reloadButton.innerHTML = "Recommencer";
-    endGameBox.appendChild(reloadButton);
-    reloadButton.addEventListener("click", () => {
-      window.location.reload(true);
-    });
-
-    // Créer le boutton enregistrer
-    const registerButton = document.createElement("button");
-    registerButton.innerHTML = "Enregistrer ma perf";
-
-    // Lier le lien vers php
-    registerButton.addEventListener("click", () => {
-      // Récupérer le pseudo et commentaire
-      const pseudo = document.getElementById("pseudo").value;
-      const comment = document.getElementById("comment").value;
-
-      document.location.href =
-        "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
-    });
-
-    // On ajoute les boutons et on affiche le tout
-    endGameBox.appendChild(registerButton);
-    endGameBox.classList.add("show");
-  };
+  document.addEventListener("keyup", keyControl);
 
   /*---------------------------------------------------------------------------*/
   /*------------------ FONCTIONS SWIPE ----------------------------------------*/
@@ -559,8 +542,6 @@ document.addEventListener("DOMContentLoaded", () => {
     startTime,
     swipeDirection;
 
-  /*----------------------------------------------------------------------------*/
-  /*----------------------------------------------------------------------------*/
   /*----------------------------------------------------------------------------*/
 
   touchSurface.addEventListener(
@@ -615,8 +596,4 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     false
   );
-
-  createBoard();
-
-  document.addEventListener("keyup", keyControl);
 });
