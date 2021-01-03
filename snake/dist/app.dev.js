@@ -1,5 +1,7 @@
 "use strict";
 
+var _endGame = require("../endGame.js");
+
 document.addEventListener("DOMContentLoaded", function () {
   var squares = document.querySelectorAll(".snakeGrid div");
   var scoreDisplay = document.querySelector("span");
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentSnake[0] % width === width - 1 && direction === 1 || // tape le mur de gauche
     currentSnake[0] % width === 0 && direction === -1 || currentSnake[0] - width < 0 && direction === -width || squares[currentSnake[0] + direction].classList.contains("snake")) {
       clearInterval(interval);
-      endGame();
+      (0, _endGame.endGame)(score);
     }
 
     var tail = currentSnake.pop();
@@ -116,29 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function snakeGoRight() {
     direction = 1;
-  }
-
-  function endGame() {
-    var endGameBox = document.querySelector(".endGameBox"); // Ajout d'un bouton reload
-
-    var reloadButton = document.createElement("button");
-    reloadButton.innerHTML = "Recommencer";
-    endGameBox.appendChild(reloadButton);
-    reloadButton.addEventListener("click", function () {
-      window.location.reload(true);
-    }); // Créer le boutton enregistrer
-
-    var registerButton = document.createElement("button");
-    registerButton.innerHTML = "Enregistrer ma perf"; // Lier le lien vers php
-
-    registerButton.addEventListener("click", function () {
-      // Récupérer le pseudo et commentaire
-      var pseudo = document.getElementById("pseudo").value;
-      var comment = document.getElementById("comment").value;
-      document.location.href = "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
-    });
-    endGameBox.appendChild(registerButton);
-    endGameBox.style.top = "100px";
   }
 
   document.addEventListener("keyup", control);

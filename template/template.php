@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./app.js"></script>
     <?php
+    if (isset($js1)) {
+      echo $js1;
+    }
     if (isset($js2)) {
-      echo "<script src=".$js2."></script>";
+      echo $js2;
     }
     ?>
     <link rel="stylesheet" href="../css/style.css" />

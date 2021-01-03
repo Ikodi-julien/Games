@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var checkForWin = function checkForWin() {
     // On regarde si une case contient 2048
     for (var i = 0; i < squares.length; i++) {
-      if (squares[i].innerHTML == 8) {
+      if (squares[i].innerHTML == 2048) {
         var winnerDisplay = document.getElementById("deuxMilles__winner");
         winnerDisplay.classList.add("deuxMilles__winner__show");
         var gameOverDisplay = document.getElementById("gameOverDisplay");
@@ -521,7 +521,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("touche start");
     var touch = event.changedTouches[0];
     swipeDirection = "none";
-    fingerDistance = 0;
     touchStartX = touch.pageX;
     touchStartY = touch.pageY;
     startTime = new Date().getTime(); // record time when finger first makes contact with surface

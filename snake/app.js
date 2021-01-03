@@ -1,3 +1,5 @@
+import { endGame } from "../endGame.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const squares = document.querySelectorAll(".snakeGrid div");
   const scoreDisplay = document.querySelector("span");
@@ -62,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       clearInterval(interval);
 
-      endGame();
+      endGame(score);
     }
 
     const tail = currentSnake.pop();
@@ -120,35 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function snakeGoRight() {
     direction = 1;
-  }
-
-  function endGame() {
-    const endGameBox = document.querySelector(".endGameBox");
-
-    // Ajout d'un bouton reload
-    const reloadButton = document.createElement("button");
-    reloadButton.innerHTML = "Recommencer";
-    endGameBox.appendChild(reloadButton);
-    reloadButton.addEventListener("click", () => {
-      window.location.reload(true);
-    });
-
-    // Créer le boutton enregistrer
-    const registerButton = document.createElement("button");
-    registerButton.innerHTML = "Enregistrer ma perf";
-
-    // Lier le lien vers php
-    registerButton.addEventListener("click", () => {
-      // Récupérer le pseudo et commentaire
-      const pseudo = document.getElementById("pseudo").value;
-      const comment = document.getElementById("comment").value;
-
-      document.location.href =
-        "?pseudo=" + pseudo + "&score=" + score + "&comment=" + comment;
-    });
-
-    endGameBox.appendChild(registerButton);
-    endGameBox.style.top = "100px";
   }
 
   document.addEventListener("keyup", control);

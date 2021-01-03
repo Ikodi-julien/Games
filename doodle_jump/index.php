@@ -1,6 +1,8 @@
 <?php
 header("Cache-Control: no-cache, must-revalidate");
 
+$js1 = '<script src="./app.js" type="module"></script>';
+
 /* Connexion DataBase */
 function loadClass($className) {
   require('../classes/'.$className.'.php');
