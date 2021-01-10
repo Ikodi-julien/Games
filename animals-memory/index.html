@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Animals Memory</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="titre">animals memory</h1>
+      <div class="plateau-carte" id="plateau"></div>
+
+      <div class="infos_jeu">
+        <div class="infos_jeu_item">
+          Nombre de coups joués : <span class="resultat" id="nbCoups">0</span>
+        </div>
+
+        <div class="infos_jeu_item">
+          Paires restantes : <span class="resultat" id="nbPaires">24</span>
+        </div>
+      </div>
+
+      <div class="gagner">
+        <h2>BRAVO C'EST GAGNÉ</h2>
+      </div>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

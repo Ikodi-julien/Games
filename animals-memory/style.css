@@ -1,0 +1,170 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url('./image/fond-ecran_foret_memory.jpg');
+  background-size: cover;
+  background-position-y: bottom;
+}
+
+.titre {
+  font-family: 'Bangers', cursive;
+  text-align: center;
+  padding: 10px 20px;
+  margin: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 4vw;
+  color: rgb(40, 40, 40, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+.plateau-carte {
+  width: 100vw;
+  max-width: 1500px;
+  padding: 1vw;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  background-color: rgba(0, 128, 0);
+  border-radius: 8px;
+  z-index: 1;
+}
+
+.dos-carte {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url(./image/dos_carte.png) no-repeat;
+  background-position: center;
+  background-size: cover;
+  transform: scale(1);
+  z-index: 3;
+}
+
+.carte {
+  position: relative;
+  border-radius: 8px;
+  margin: 0.5vw;
+  max-width: 140px;
+  width: 8vw;
+  min-width: 50px;
+  height: 12vw;
+  max-height: 210px;
+  min-height: 75px;
+  z-index: 2;
+}
+
+.carte__1 {
+  background: white url(./image/cerf.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__2 {
+  background: white url(./image/poisson-rose.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__3 {
+  background: white url(./image/poisson-rouge.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__4 {
+  background: white url(./image/écureuil.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__5 {
+  background: white url(./image/dalmatien.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__6 {
+  background: white url(./image/chaton.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__7 {
+  background: white url(./image/perroquet.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__8 {
+  background: white url(./image/crabe.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__9 {
+  background: white url(./image/zebre.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__10 {
+  background: white url(./image/turtle.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__11 {
+  background: white url(./image/ornithorinque.png) center no-repeat;
+  background-size: contain;
+}
+
+.carte__12 {
+  background: white url(./image/white_fox.png) center no-repeat;
+  background-size: contain;
+}
+
+.transparent {
+  transform: scale(0) rotate(45deg);
+  transition: all 100ms;
+}
+
+.showBack {
+  transform: scale(1) rotate(0deg);
+  transition: all 100ms 1000ms;
+}
+
+.infos_jeu {
+  display: flex;
+  font-family: 'Bangers', cursive;
+  font-size: 3vw;
+  padding: 0 10px;
+  margin: 10px;
+  color: rgb(40, 40, 40, 0.9);
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+@media screen and (max-width: 700px) {
+  .infos_jeu {
+    font-size: 4vw;
+  }
+}
+.infos_jeu_item {
+  margin: 10px;
+}
+
+.gagner {
+  position: fixed;
+  padding: 4vw;
+  font-family: 'Bangers', cursive;
+  font-size: 5vw;
+  background-color: white;
+  border-radius: 10px;
+  top: -200vh;
+  right: 20%;
+  z-index: 10;
+}
+
+.showGagner {
+  top: 40%;
+  transition: top 200ms;
+}
