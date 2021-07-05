@@ -126,5 +126,5 @@ function prepareMemory() {
 /*------------------------------------------------*/
 
 document.addEventListener('DOMContentLoaded', () => {
-  prepareMemory()
+  setTimeout(prepareMemory, 300)
 })

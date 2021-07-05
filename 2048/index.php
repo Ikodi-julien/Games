@@ -53,9 +53,6 @@ $scores = ob_get_clean();
 ob_start();
 ?>
 
-
-
-
 <div class=".container">
   <div class=".gameContainer">
 
